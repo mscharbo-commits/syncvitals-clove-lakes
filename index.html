@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RPM Assessment — Clove Lakes</title>
+<style>
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0D2B5E;
+  --teal:#028090;    --teal-dk:#015F6B;  --teal-lt:#EBF6F8;  --teal-md:#B0DCE2;
+  --green:#1A7A4A;   --green-lt:#EAF7F0; --green-md:#A8D8BC;
+  --amber:#B86010;   --amber-lt:#FEF4E8;
+  --red:#A82828;     --red-lt:#FDECEA;
+  --purple:#4A40A0;  --purple-lt:#EEEDFB;
+  --slate:#3A4A5C;
+  --border:#DDE4EE;  --border-lt:#EEF2F8;
+  --text:#1A2638;    --gray:#5A6880;     --gray-lt:#8898AA;
+  --white:#FFFFFF;   --off:#F5F8FC;      --warm:#FAFBFD;
+  --mono:'SF Mono','Fira Mono',Consolas,monospace;
+  --serif:Georgia,'Times New Roman',serif;
+}
+html{font-size:14px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:var(--off);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiasedmargin:0;padding:0;width:100%;}
+.page{max-width:100%;margin:0 auto;background:var(--white);box-shadow:0 0 40px rgba(13,43,94,.08)}
+
+/* ══ HEADER — light, clean, logo prominent ══ */
+.hdr{background:var(--white);border-bottom:3px solid var(--teal);padding:28px 40px}
+.hdr-inner{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center}
+.hdr-logo-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0}
+.hdr-logo{width:160px;height:auto;display:block}
+.hdr-by{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gray-lt);text-align:right}
+.hdr-date{font-size:10px;color:var(--gray-lt);text-align:right}
+
+.hdr-eyebrow{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.hdr-eyebrow::before{content:'';width:24px;height:2px;background:var(--teal);border-radius:1px}
+.hdr-name{font-family:var(--serif);font-size:28px;font-weight:700;color:var(--navy);line-height:1.15;margin-bottom:6px}
+.hdr-address{font-size:12px;color:var(--gray);margin-bottom:14px}
+.hdr-tagline{font-size:12px;color:var(--gray);line-height:1.65;font-style:italic;max-width:480px;padding-left:14px;border-left:3px solid var(--teal-md)}
+
+/* stat strip */
+.stat-strip{background:var(--navy);padding:14px 40px;display:flex;gap:0;align-items:stretch}
+.stat-item{flex:1;padding:0 16px;border-right:1px solid rgba(255,255,255,.1)}
+.stat-item:first-child{padding-left:0}
+.stat-item:last-child{border-right:none;padding-right:0}
+.stat-lbl{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:3px}
+.stat-val{font-size:14px;font-weight:700;color:#fff;font-family:var(--serif)}
+.stat-val.good{color:#7FDBA8}
+.stat-val.watch{color:#FAC88A}
+.stat-sub{font-size:9px;color:rgba(255,255,255,.32);margin-top:1px}
+
+/* ══ BODY ══ */
+.body{padding:32px 40px 48pxmargin:0;padding:0;width:100%;}
+
+/* section headers */
+.sec{margin-bottom:28px}
+.sec-hdr{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+.sec-hdr-bar{width:4px;border-radius:2px;flex-shrink:0;margin-top:3px;height:32px}
+.sec-hdr-bar.teal{background:var(--teal)}
+.sec-hdr-bar.green{background:var(--green)}
+.sec-hdr-bar.navy{background:var(--navy)}
+.sec-hdr-bar.amber{background:var(--amber)}
+.sec-hdr-bar.purple{background:var(--purple)}
+.sec-eyebrow{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gray-lt);margin-bottom:3px}
+.sec-title{font-family:var(--serif);font-size:17px;font-weight:700;color:var(--navy);line-height:1.2}
+.sec-sub{font-size:11px;color:var(--gray);margin-top:3px;line-height:1.5}
+
+/* ══ SYNCVITALS BLOCK ══ */
+.sv-block{border:1.5px solid var(--border);border-top:3px solid var(--teal);border-radius:10px;overflow:hidden;margin-bottom:20px}
+.sv-block-header{background:var(--warm);padding:16px 22px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:20px}
+.sv-header-logo{width:120px;height:auto;flex-shrink:0}
+.sv-header-divider{width:1px;background:var(--border);self-align:stretch;min-height:60px}
+.sv-header-text .sv-ht-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.sv-header-text .sv-ht-sub{font-size:11px;color:var(--gray);line-height:1.6}
+.sv-block-body{padding:16px 22px;background:var(--white);display:grid;grid-template-columns:1fr 1fr;gap:18pxmargin:0;padding:0;width:100%;}
+.sv-col-title{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal-dk);margin-bottom:10px}
+.sv-item{display:flex;gap:9px;align-items:flex-start;margin-bottom:9px}
+.sv-item:last-child{margin-bottom:0}
+.sv-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.sv-dot.teal{background:var(--teal)}
+.sv-dot.green{background:var(--green)}
+.sv-item-text{font-size:11px;color:var(--gray);line-height:1.5}
+.sv-item-text strong{color:var(--navy);font-weight:600}
+.sv-block-footer{background:var(--teal-lt);border-top:1px solid var(--teal-md);padding:9px 22px;display:flex;gap:7px;flex-wrap:wrap}
+.sv-tag{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:3px}
+.sv-tag.t{background:rgba(2,128,144,.12);color:var(--teal-dk)}
+.sv-tag.g{background:rgba(26,122,74,.12);color:var(--green)}
+.sv-tag.a{background:rgba(184,96,16,.1);color:var(--amber)}
+
+/* ══ IN-FACILITY SECTION ══ */
+.mins-box{background:var(--teal-lt);border:1px solid var(--teal-md);border-radius:10px;padding:18px 22px;margin-bottom:16px;display:grid;grid-template-columns:90px 1fr;gap:22px;align-items:center}
+.mins-num{font-family:var(--serif);font-size:54px;font-weight:700;color:var(--teal);line-height:1;text-align:center}
+.mins-unit{font-size:10px;color:var(--teal-dk);text-align:center;margin-top:2px;text-transform:uppercase;letter-spacing:.1em;font-weight:700}
+.mins-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.mins-body{font-size:11px;color:var(--slate);line-height:1.65margin:0;padding:0;width:100%;}
+.mins-body strong{color:var(--navy)}
+.mins-callout{font-size:11px;color:var(--teal-dk);font-weight:600;margin-top:8px;padding-top:8px;border-top:1px solid var(--teal-md)}
+
+/* role cards */
+.role-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.role-card{border:1.5px solid var(--border);border-radius:8px;overflow:hidden}
+.rc-hdr{padding:8px 13px;font-size:10px;font-weight:700;display:flex;align-items:center;gap:7px;line-height:1.3}
+.rc-icon{font-size:14px}
+.rc-body{padding:10px 13px;background:var(--warm)margin:0;padding:0;width:100%;}
+.rc-item{display:flex;gap:7px;align-items:flex-start;padding:5px 0;border-bottom:1px solid var(--border-lt);font-size:10px;color:var(--text);line-height:1.4}
+.rc-item:last-child{border-bottom:none}
+.rc-arrow{color:var(--teal);font-weight:700;flex-shrink:0;margin-top:1px;font-size:10px}
+.rc-platform .rc-hdr{background:var(--teal-lt);color:var(--teal-dk)}
+.rc-onsite .rc-hdr{background:var(--navy-lt, #EEF3FA);color:var(--navy)}
+.rc-svnurse .rc-hdr{background:var(--green-lt);color:var(--green)}
+.rc-never .rc-hdr{background:var(--red-lt);color:var(--red)}
+
+/* alert routing table */
+.alert-tbl{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:14px;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.alert-tbl th{background:var(--teal);color:rgba(255,255,255,.9);padding:7px 13px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em}
+.alert-tbl td{padding:8px 13px;border-bottom:1px solid var(--border-lt);vertical-align:top;line-height:1.4}
+.alert-tbl tr:last-child td{border-bottom:none}
+.alert-tbl tr:nth-child(even) td{background:var(--warm)}
+.badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;display:inline-block;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
+.b-crisis{background:var(--red-lt);color:var(--red);border:1px solid #F0B0A8}
+.b-stage2{background:var(--amber-lt);color:var(--amber);border:1px solid #ECC898}
+.b-watch{background:#FFF8E8;color:#8A6000;border:1px solid #EDD898}
+.b-stable{background:var(--green-lt);color:var(--green);border:1px solid #A8D8B8}
+.alert-note{font-size:10px;color:var(--gray);font-style:italic;padding:8px 13px;background:var(--off);border-top:1px solid var(--border)}
+.chk{color:var(--green);font-weight:700}
+
+/* liability box */
+.liability-box{background:var(--off);border:1px solid var(--border);border-left:4px solid var(--teal);border-radius:0 8px 8px 0;padding:13px 18px;margin-bottom:14px;display:flex;gap:13px;align-items:flex-start}
+.lb-icon{font-size:20px;flex-shrink:0}
+.lb-title{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.lb-body{font-size:11px;color:var(--slate);line-height:1.6margin:0;padding:0;width:100%;}
+.lb-body strong{color:var(--navy)}
+
+/* EHR section */
+.ehr-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.ehr-card{background:var(--white);border:1.5px solid var(--border);border-radius:8px;padding:12px 13px;text-align:center}
+.ehr-name{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:2px}
+.ehr-cert{font-size:9px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.ehr-note{font-size:10px;color:var(--gray);line-height:1.4}
+.ehr-flows{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.ehr-flow{border-radius:7px;padding:10px 14px}
+.ehr-in{background:var(--teal-lt);border:1px solid var(--teal-md)}
+.ehr-out{background:var(--green-lt);border:1px solid var(--green-md)}
+.ehr-flow-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px}
+.ehr-in .ehr-flow-title{color:var(--teal-dk)}
+.ehr-out .ehr-flow-title{color:var(--green)}
+.ehr-flow-item{font-size:11px;color:var(--text);padding:3px 0;border-bottom:1px solid rgba(0,0,0,.06);line-height:1.35}
+.ehr-flow-item:last-child{border-bottom:none}
+.ehr-note-box{background:var(--off);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:0 7px 7px 0;padding:9px 14px;font-size:11px;color:var(--text);line-height:1.6}
+.ehr-note-box strong{color:var(--navy)}
+
+/* financial blocks */
+.phase-block{border:1.5px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:14px}
+.ph-hdr{padding:8px 18px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#fff;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+.ph-tag{font-size:9px;background:rgba(255,255,255,.2);padding:2px 8px;border-radius:3px}
+.ph-teal{background:var(--teal)}
+.ph-green{background:var(--green)}
+.ph-navy{background:var(--navy)}
+.ph-body{background:var(--white)margin:0;padding:0;width:100%;}
+.p-row{display:flex;justify-content:space-between;align-items:baseline;padding:7px 18px;border-bottom:1px solid var(--border-lt);gap:12px}
+.p-row:last-child{border-bottom:none}
+.pl{font-size:12px;color:var(--gray);flex:1;line-height:1.4}
+.pb{font-size:10px;color:var(--gray-lt);display:block;margin-top:1px;font-style:italic}
+.pv{font-size:12px;font-weight:600;color:var(--text);white-space:nowrap}
+.pv.pos{color:var(--green)}
+.pv.neg{color:var(--red)}
+.p-sub{background:var(--warm)}
+.p-sub .pl{font-weight:700;color:var(--navy)}
+.p-sub .pv{font-size:14px}
+.p-hi{background:var(--green-lt)}
+.p-hi .pl{font-weight:700;color:var(--green)}
+.p-hi .pv{font-size:14px;color:var(--green)}
+
+/* pipeline */
+.pipeline{display:flex;align-items:center;background:var(--warm);border:1px solid var(--border);border-radius:8px;padding:14px 12px;margin:12px 0 14px;gap:0}
+.ps{flex:1;text-align:center;padding:0 4px}
+.ps-num{font-size:18px;font-weight:700;font-family:var(--serif);color:var(--navy);line-height:1}
+.ps-lbl{font-size:9px;color:var(--gray);margin-top:3px;line-height:1.3}
+.ps-sub{font-size:8px;color:var(--gray-lt);margin-top:1px;font-style:italic}
+.pa{color:var(--teal);font-weight:700;font-size:12px;padding:0 2px;flex-shrink:0}
+.ps.hi .ps-num{color:var(--green);font-size:20px}
+.ps.hi .ps-lbl{color:var(--green);font-weight:600;font-size:10px}
+
+/* billing codes */
+.billing-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.bg{border:1.5px solid var(--border);border-radius:8px;overflow:hidden}
+.bg-h{padding:7px 13px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#fff}
+.bg-h.rpm{background:var(--green)}
+.bg-h.ccm{background:var(--purple)}
+.bg-h.mnt{background:var(--amber)}
+.bg-row{display:flex;align-items:baseline;gap:7px;padding:6px 13px;border-bottom:1px solid var(--border-lt);background:var(--white)}
+.bg-row:last-child{border-bottom:none}
+.bg-row.new-code{background:#FFFBF4}
+.bg-row.tot{background:var(--warm)}
+.bg-code{font-family:var(--mono);font-size:10px;font-weight:700;flex-shrink:0;min-width:42px}
+.bg-code.rpm{color:var(--green)}
+.bg-code.ccm{color:var(--purple)}
+.bg-code.mnt{color:var(--amber)}
+.bg-desc{font-size:10px;color:var(--gray);flex:1;line-height:1.3}
+.bg-rate{font-size:11px;font-weight:700;color:var(--text);white-space:nowrap;margin-left:auto}
+.bg-row.tot .bg-desc{font-weight:700;color:var(--navy)}
+.net-badge{background:var(--green);border-radius:6px;padding:9px 13px;margin-top:8px;text-align:center}
+.net-badge .nb-val{font-size:19px;font-weight:700;color:#fff;font-family:var(--serif)}
+.net-badge .nb-sub{font-size:9px;color:rgba(255,255,255,.7);margin-top:2px}
+
+/* totals */
+.totals-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:12px 0}
+.tc{border-radius:9px;padding:13px 15px;border:1.5px solid transparent}
+.tc-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px}
+.tc-val{font-size:21px;font-weight:700;font-family:var(--serif);line-height:1}
+.tc-sub{font-size:9px;margin-top:4px;line-height:1.35;opacity:.75}
+.tc-green{background:var(--green-lt);border-color:var(--green-md)}.tc-green .tc-lbl,.tc-green .tc-val{color:var(--green)}
+.tc-teal{background:var(--teal-lt);border-color:var(--teal-md)}.tc-teal .tc-lbl,.tc-teal .tc-val{color:var(--teal-dk)}
+.tc-amber{background:var(--amber-lt);border-color:#E8C080}.tc-amber .tc-lbl,.tc-amber .tc-val{color:var(--amber)}
+.tc-navy{background:#EEF3FA;border-color:#C0CDE0}.tc-navy .tc-lbl,.tc-navy .tc-val{color:var(--navy)}
+
+/* growth table */
+.gt{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:13px}
+.gt th{background:var(--teal);color:rgba(255,255,255,.9);padding:7px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em}
+.gt td{padding:7px 12px;border-bottom:1px solid var(--border-lt)}
+.gt tr:nth-child(even) td{background:var(--warm)}
+.gt tr:last-child td{border-bottom:none}
+.gt .tr-tot td{background:var(--green-lt);font-weight:700;color:var(--green)}
+.gt .tr-ss td{background:var(--green);color:#fff;font-weight:700}
+.rev{font-weight:700;color:var(--green)}
+.net{font-weight:700;color:var(--teal-dk)}
+
+/* advantage table */
+.adv-t{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:14px}
+.adv-t th{padding:7px 12px;font-size:9px;font-weight:700;text-align:left;text-transform:uppercase;letter-spacing:.07em}
+.adv-t th:nth-child(1){background:var(--slate);color:#fff;width:32%}
+.adv-t th:nth-child(2){background:#782020;color:#fff;width:34%}
+.adv-t th:nth-child(3){background:var(--green);color:#fff;width:34%}
+.adv-t td{padding:7px 12px;border-bottom:1px solid var(--border-lt);vertical-align:top;line-height:1.4}
+.adv-t td:nth-child(2){color:var(--red)}
+.adv-t td:nth-child(3){color:var(--green);font-weight:500;background:#F2FAF5}
+.adv-t tr:nth-child(even) td:nth-child(1){background:var(--warm)}
+
+/* steps */
+.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:12px}
+.step{background:var(--warm);border:1.5px solid var(--border);border-top:3px solid var(--teal);border-radius:8px;padding:14px 14px;position:relative;overflow:hidden}
+.step::after{content:attr(data-n);position:absolute;bottom:-6px;right:8px;font-size:36px;font-weight:700;font-family:var(--serif);color:rgba(2,128,144,.07);line-height:1;pointer-events:none}
+.step-n{font-size:9px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px}
+.step-title{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:5px;line-height:1.3}
+.step-body{font-size:10px;color:var(--gray);line-height:1.5margin:0;padding:0;width:100%;}
+
+/* clinical grid */
+.clin-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px}
+.clin-card{background:var(--teal-lt);border:1px solid var(--teal-md);border-radius:8px;padding:11px 13px;display:flex;gap:9px}
+.cc-check{color:var(--teal);font-size:14px;flex-shrink:0;margin-top:1px}
+.cc-title{font-size:11px;font-weight:700;color:var(--navy);margin-bottom:2px}
+.cc-body{font-size:10px;color:var(--slate);line-height:1.4margin:0;padding:0;width:100%;}
+
+/* citations */
+.citations{background:var(--warm);border:1px solid var(--border);border-radius:8px;padding:15px 20px;margin-top:22px}
+.cite-hdr{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--navy);margin-bottom:9px;padding-bottom:7px;border-bottom:1px solid var(--border)}
+.cite-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+.cite-list li{font-size:10px;color:var(--gray);line-height:1.5;display:flex;gap:7px}
+.cn{font-weight:700;color:var(--teal);flex-shrink:0;min-width:14px;font-family:var(--mono)}
+.disc{font-size:9px;color:var(--gray-lt);line-height:1.5;margin-top:9px;padding-top:8px;border-top:1px solid var(--border);font-style:italic}
+
+/* footer */
+.footer{background:var(--warm);border-top:2px solid var(--border);padding:14px 40px;display:flex;justify-content:space-between;align-items:center;gap:24px}
+.footer-left{display:flex;align-items:center;gap:12px}
+.footer-logo{width:80px;height:auto;opacity:.7}
+.footer-text{font-size:10px;color:var(--gray-lt);line-height:1.5}
+.footer-right{font-size:10px;color:var(--gray-lt);text-align:right;line-height:1.5}
+
+@media print{
+  body{background:white;-webkit-print-color-adjust:exact;print-color-adjust:exactmargin:0;padding:0;width:100%;}
+  .page{box-shadow:none}
+}
+
+.page{overflow-x:hidden}
+[id^="p-"]{overflow-x:hidden;box-sizing:border-box;max-width:100%}
+table{width:100%!important;max-width:100%!important;table-layout:fixed}
+.role-grid,.billing-grid,.ehr-grid,.totals-grid,.steps-grid,.clin-grid{max-width:100%;width:100%}
+
+/* Full-width layout */
+.page { max-width: 100% !important; width: 100% !important; margin: 0 !important; border-radius: 0 !important; }
+.hdr, .hdr-inner { max-width: 100% !important; width: 100% !important; }
+.footer { border-radius: 0 !important; }
+body { margin: 0; padding: 0; }
+/* Grids fill available space */
+.calc-wrap { grid-template-columns: 320px 1fr; }
+.stats-grid, .totals-grid { width: 100%; }
+/* Tables don't overflow */
+table { table-layout: fixed; }
+td, th { overflow: hidden; text-overflow: ellipsis; }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="hdr"><div class="hdr-inner"><div><div class="hdr-eyebrow">Remote Patient Monitoring · Financial Assessment</div><div class="hdr-name">Clove Lakes Health Care<br>&amp; Rehabilitation Center</div><div class="hdr-address">25 Fanning St, Staten Island, NY 10314 &nbsp;·&nbsp; CMS #335239 &nbsp;·&nbsp; Infinite Care Network</div><div class="hdr-tagline">"From the moment you enter our doors, you're one step closer to returning to the life you love." — This assessment quantifies what that promise is worth and what SyncVitals adds to it.</div></div><div class="hdr-logo-wrap"><div class="hdr-by">Prepared by</div><img class="hdr-logo" src="data:image/jpeg;base64,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" alt="SyncVitals"><div class="hdr-date">July 2026 &nbsp;·&nbsp; Confidential</div></div></div></div>
+<div style="background:#0D2B5E;padding:12px 48px;display:flex;gap:0;align-items:stretch;width:100%;box-sizing:border-box"><div style="flex:1;padding:0 14px 0 0;border-right:1px solid rgba(255,255,255,.1)"><div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:3px">Licensed Beds</div><div style="font-size:14px;font-weight:700;color:#fff;font-family:Georgia,serif">576</div><div style="font-size:9px;color:rgba(255,255,255,.32)">Very large facility</div></div><div style="flex:1;padding:0 14px;border-right:1px solid rgba(255,255,255,.1)"><div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:3px">Avg Daily Census</div><div style="font-size:14px;font-weight:700;color:#fff;font-family:Georgia,serif">472</div><div style="font-size:9px;color:rgba(255,255,255,.32)">~82% occupancy</div></div><div style="flex:1;padding:0 14px;border-right:1px solid rgba(255,255,255,.1)"><div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:3px">Medicare Residents</div><div style="font-size:14px;font-weight:700;color:#fff;font-family:Georgia,serif">~283</div><div style="font-size:9px;color:rgba(255,255,255,.32)">~60% MC mix</div></div><div style="flex:1;padding:0 14px;border-right:1px solid rgba(255,255,255,.1)"><div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:3px">Annual MC Admissions</div><div style="font-size:14px;font-weight:700;color:#fff;font-family:Georgia,serif">3,973</div><div style="font-size:9px;color:rgba(255,255,255,.32)">~11 per day</div></div><div style="flex:1;padding:0 14px;border-right:1px solid rgba(255,255,255,.1)"><div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:3px">CMS Overall Rating</div><div style="font-size:14px;font-weight:700;color:#FAC88A;font-family:Georgia,serif">4 Stars</div><div style="font-size:9px;color:rgba(255,255,255,.32)">5 Stars Quality Measures</div></div><div style="flex:1;padding:0 14px;border-right:1px solid rgba(255,255,255,.1)"><div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:3px">Staffing Gap</div><div style="font-size:14px;font-weight:700;color:#FAC88A;font-family:Georgia,serif">3.52 hrs</div><div style="font-size:9px;color:rgba(255,255,255,.32)">vs 3.87 national avg</div></div><div style="flex:1;padding:0 0 0 14px"><div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:3px">Referral Hospitals</div><div style="font-size:14px;font-weight:700;color:#7FDBA8;font-family:Georgia,serif">2</div><div style="font-size:9px;color:rgba(255,255,255,.32)">Richmond Univ · SIUH</div></div></div>
+<div style="background:#fff;border-bottom:2px solid #DDE4EE;padding:0 32px;display:flex;justify-content:flex-start;position:sticky;top:0;z-index:999;box-shadow:0 2px 8px rgba(13,43,94,.06);width:100%;box-sizing:border-box">
+  <button id="b-platform" onclick="go('platform')" style="display:flex;align-items:center;gap:6px;padding:12px 16px;font-size:11px;font-weight:600;border:none;border-bottom:3px solid;margin-bottom:-2px;background:none;cursor:pointer;white-space:nowrap;font-family:inherit;flex-shrink:0;color:#028090;border-bottom-color:#028090"><span style="font-size:13px">🖥</span> Platform</button>
+  <button id="b-governance" onclick="go('governance')" style="display:flex;align-items:center;gap:6px;padding:12px 16px;font-size:11px;font-weight:600;border:none;border-bottom:3px solid;margin-bottom:-2px;background:none;cursor:pointer;white-space:nowrap;font-family:inherit;flex-shrink:0;color:#5A6880;border-bottom-color:transparent"><span style="font-size:13px">👨‍⚕️</span> Clinical Governance</button>
+  <button id="b-in-facility" onclick="go('in-facility')" style="display:flex;align-items:center;gap:6px;padding:12px 16px;font-size:11px;font-weight:600;border:none;border-bottom:3px solid;margin-bottom:-2px;background:none;cursor:pointer;white-space:nowrap;font-family:inherit;flex-shrink:0;color:#5A6880;border-bottom-color:transparent"><span style="font-size:13px">🏥</span> In-Facility</button>
+  <button id="b-ehr" onclick="go('ehr')" style="display:flex;align-items:center;gap:6px;padding:12px 16px;font-size:11px;font-weight:600;border:none;border-bottom:3px solid;margin-bottom:-2px;background:none;cursor:pointer;white-space:nowrap;font-family:inherit;flex-shrink:0;color:#5A6880;border-bottom-color:transparent"><span style="font-size:13px">🔗</span> EHR &amp; Billing</button>
+  <button id="b-financial" onclick="go('financial')" style="display:flex;align-items:center;gap:6px;padding:12px 16px;font-size:11px;font-weight:600;border:none;border-bottom:3px solid;margin-bottom:-2px;background:none;cursor:pointer;white-space:nowrap;font-family:inherit;flex-shrink:0;color:#5A6880;border-bottom-color:transparent"><span style="font-size:13px">📊</span> Financial Model</button>
+  <button id="b-calculator" onclick="go('calculator')" style="display:flex;align-items:center;gap:6px;padding:12px 16px;font-size:11px;font-weight:600;border:none;border-bottom:3px solid;margin-bottom:-2px;background:none;cursor:pointer;white-space:nowrap;font-family:inherit;flex-shrink:0;color:#1A7A4A;border-bottom-color:#1A7A4A"><span style="font-size:13px">🧮</span> Your Numbers</button>
+  <button id="b-outpatient" onclick="go('outpatient')" style="display:flex;align-items:center;gap:6px;padding:12px 16px;font-size:11px;font-weight:600;border:none;border-bottom:3px solid;margin-bottom:-2px;background:none;cursor:pointer;white-space:nowrap;font-family:inherit;flex-shrink:0;color:#5A6880;border-bottom-color:transparent"><span style="font-size:13px">🏃</span> Outpatient</button>
+  <button id="b-next-steps" onclick="go('next-steps')" style="display:flex;align-items:center;gap:6px;padding:12px 16px;font-size:11px;font-weight:600;border:none;border-bottom:3px solid;margin-bottom:-2px;background:none;cursor:pointer;white-space:nowrap;font-family:inherit;flex-shrink:0;color:#5A6880;border-bottom-color:transparent"><span style="font-size:13px">✅</span> Next Steps</button>
+</div>
+
+<div id="p-platform" style="display:block;padding:32px 48px 56px;overflow-x:hidden;box-sizing:border-box;width:100%">
+<div class="sec">
+  <div class="sec-hdr">
+    <div class="sec-hdr-bar teal"></div>
+    <div><div class="sec-eyebrow">The Platform</div><div class="sec-title">What SyncVitals Delivers to Clove Lakes</div><div class="sec-sub">A single monthly fee. Everything included. Nothing to build.</div></div>
+  </div>
+
+  <div class="sv-block">
+    <div class="sv-block-header">
+      <img class="sv-header-logo" src="data:image/jpeg;base64,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" alt="SyncVitals">
+      <div style="width:1px;background:var(--border);align-self:stretch;margin:0 4px"></div>
+      <div class="sv-header-text">
+        <div class="sv-ht-title">Full-stack RPM managed service — not a software license, not a device vendor</div>
+        <div class="sv-ht-sub">Clove Lakes does not hire RPM coordinators, source devices, manage cellular data, configure billing codes, or build care plans. SyncVitals operates the full clinical and billing infrastructure under physician general supervision. The Clove Lakes clinical team focuses on patient care.</div>
+      </div>
+    </div>
+    <div class="sv-block-body">
+      <div>
+        <div class="sv-col-title">Platform Components</div>
+        <div class="sv-item"><div class="sv-dot teal"></div><div class="sv-item-text"><strong>AI Care Plan</strong> — personalized 30/60/90-day care plans from NANDA diagnoses and AHA/ACC/GOLD/KDIGO/ADA guidelines. Updates in real time as vitals change.</div></div>
+        <div class="sv-item"><div class="sv-dot teal"></div><div class="sv-item-text"><strong>Command Dashboard</strong> — all 283 Medicare residents ranked by AI risk score, updated every 15 seconds. DON sees who needs attention without manual rounds.</div></div>
+        <div class="sv-item"><div class="sv-dot teal"></div><div class="sv-item-text"><strong>Prediction AI</strong> — composite risk score 0–100, 48-hour ER probability, 30-day hospital admission probability per patient. Runs continuously in-facility and post-discharge.</div></div>
+        <div class="sv-item"><div class="sv-dot teal"></div><div class="sv-item-text"><strong>Patient Nutrition Portal</strong> — mobile food and activity diary with real-time alerts for sodium, potassium, glucose exceedance. Critical for Clove Lakes' Diabetes and Pulmonary programs.</div></div>
+      </div>
+      <div>
+        <div class="sv-col-title">Managed Service Layer</div>
+        <div class="sv-item"><div class="sv-dot green"></div><div class="sv-item-text"><strong>Nursing staff included</strong> — SyncVitals nurses handle device compliance, post-discharge patient management, and Part B CPT 99457/99458 time documentation under physician general supervision.</div></div>
+        <div class="sv-item"><div class="sv-dot green"></div><div class="sv-item-text"><strong>700+ device connections</strong> — Dexcom CGM, pulse oximeters, connected BP cuffs, Fitbit, Apple Watch, and SyncVitals private-label FDA-cleared cellular devices. No device lock-in.</div></div>
+        <div class="sv-item"><div class="sv-dot green"></div><div class="sv-item-text"><strong>EHR integration</strong> — FHIR R4 bidirectional with Epic (App Orchard), eClinicalWorks, Oracle Health/Cerner, Athenahealth. Time logs and clinical notes written back automatically.</div></div>
+        <div class="sv-item"><div class="sv-dot green"></div><div class="sv-item-text"><strong>Two-tier pricing</strong> — $85/pt/month in-facility (Enterprise, 101–300 pts) · $100/pt/month post-discharge (nursing included for 99457/99458 management). HIPAA BAA included. AES-256 / TLS 1.3 / FIPS 140-2 Level 2 encryption.</div></div>
+      </div>
+    </div>
+    <div class="sv-block-footer">
+      <span class="sv-tag t">All 2026 RPM CPT codes</span><span class="sv-tag t">CCM billing</span><span class="sv-tag t">MNT billing</span>
+      <span class="sv-tag g">Dexcom CGM</span><span class="sv-tag g">Apple Watch · Fitbit</span><span class="sv-tag g">FDA-cleared cellular devices</span>
+      <span class="sv-tag a">No WiFi required</span><span class="sv-tag a">No smartphone required</span>
+    </div>
+  </div>
+</div>
+
+<!-- FDA-CLEARED DEVICES -->
+<div style="padding:0 0 28px">
+  <div style="background:var(--off);border:1.5px solid var(--border);border-top:3px solid var(--teal);border-radius:8px;padding:16px 20px;margin-bottom:10px">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--teal-dk);margin-bottom:10px">FDA-Cleared Devices — All Core Vitals Covered</div>
+    <div style="font-size:12px;color:var(--gray);line-height:1.7;margin-bottom:12px">SyncVitals provides <strong style="color:var(--navy)">private-labeled FDA-cleared devices</strong> for all core monitored vitals — shipped directly to the patient's home within 48 hours. No WiFi required. No smartphone required. No device sourcing or inventory management for Clove Lakes.</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px">
+      <div style="background:#FDECEA;border:1px solid #F0B0A8;border-radius:7px;padding:10px 12px;text-align:center">
+        <div style="font-size:18px;margin-bottom:4px">❤️</div>
+        <div style="font-size:11px;font-weight:700;color:#B83030;margin-bottom:2px">Blood Pressure</div>
+        <div style="font-size:9px;color:var(--gray)">Systolic · Diastolic · Pulse<br>Crisis ≥180 · Stage 2 ≥160</div>
+      </div>
+      <div style="background:#FFF8E8;border:1px solid #E8D098;border-radius:7px;padding:10px 12px;text-align:center">
+        <div style="font-size:18px;margin-bottom:4px">🩸</div>
+        <div style="font-size:11px;font-weight:700;color:#8A6000;margin-bottom:2px">Blood Glucose / CGM</div>
+        <div style="font-size:9px;color:var(--gray)">Glucose · Trends · Alerts<br>Crisis &gt;300</div>
+      </div>
+      <div style="background:#EFF6FF;border:1px solid #B0CCF0;border-radius:7px;padding:10px 12px;text-align:center">
+        <div style="font-size:18px;margin-bottom:4px">🫁</div>
+        <div style="font-size:11px;font-weight:700;color:#2255AA;margin-bottom:2px">Pulse Oximetry</div>
+        <div style="font-size:9px;color:var(--gray)">SpO₂ · Pulse Rate · O₂ Trends<br>Crisis &lt;90%</div>
+      </div>
+      <div style="background:#EEEDFB;border:1px solid #C0B8E8;border-radius:7px;padding:10px 12px;text-align:center">
+        <div style="font-size:18px;margin-bottom:4px">⚖️</div>
+        <div style="font-size:11px;font-weight:700;color:#4A40A0;margin-bottom:2px">Weight</div>
+        <div style="font-size:9px;color:var(--gray)">Daily weight · CHF alert<br>Crisis ≥5 lb gain</div>
+      </div>
+      <div style="background:#EBF6F8;border:1px solid #B0DCE2;border-radius:7px;padding:10px 12px;text-align:center">
+        <div style="font-size:18px;margin-bottom:4px">💓</div>
+        <div style="font-size:11px;font-weight:700;color:#015F6B;margin-bottom:2px">ECG</div>
+        <div style="font-size:9px;color:var(--gray)">Heart Rate · AFib Detection<br>Device or QHCP-initiated</div>
+      </div>
+      <div style="background:#EAF7F0;border:1px solid #A8D8BC;border-radius:7px;padding:10px 12px;text-align:center">
+        <div style="font-size:18px;margin-bottom:4px">💨</div>
+        <div style="font-size:11px;font-weight:700;color:#1A7A4A;margin-bottom:2px">Spirometry</div>
+        <div style="font-size:9px;color:var(--gray)">FEV1 · FVC · Peak Flow<br>COPD gold standard</div>
+      </div>
+      <div style="background:#FEF4E8;border:1px solid #E8C080;border-radius:7px;padding:10px 12px;text-align:center">
+        <div style="font-size:18px;margin-bottom:4px">🌡️</div>
+        <div style="font-size:11px;font-weight:700;color:#B86010;margin-bottom:2px">Temperature</div>
+        <div style="font-size:9px;color:var(--gray)">Body Temp · Fever Detection<br>Early infection / sepsis signal</div>
+      </div>
+      <div style="background:var(--off);border:1px solid var(--border);border-radius:7px;padding:10px 12px;text-align:center">
+        <div style="font-size:18px;margin-bottom:4px">📊</div>
+        <div style="font-size:11px;font-weight:700;color:var(--navy);margin-bottom:2px">+ More</div>
+        <div style="font-size:9px;color:var(--gray)">HRV · Respiration · Sleep<br>Activity · A1C · and more</div>
+      </div>
+    </div>
+    <div style="background:var(--teal-lt);border:1px solid var(--teal-md);border-radius:6px;padding:9px 14px;font-size:11px;color:var(--teal-dk);line-height:1.6">
+      <strong>For patients already using a CGM</strong> — Dexcom and FreeStyle Libre are FDA-cleared and integrate directly with SyncVitals. These patients generate billable 99454 data from day one with no new hardware needed.
+    </div>
+  </div>
+</div>
+
+<!-- ══ IN-FACILITY MODEL ══ -->
+</div>
+
+<div id="p-governance" style="display:none;padding:32px 48px 56px;overflow-x:hidden;box-sizing:border-box;width:100%">
+<div class="sec">
+  <div class="sec-hdr">
+    <div class="sec-hdr-bar teal"></div>
+    <div>
+      <div class="sec-eyebrow">Clinical Governance</div>
+      <div class="sec-title">The QHCP Is in Control — AI Is the Assistant, Not the Decision-Maker</div>
+      <div class="sec-sub">Every care plan is reviewed, modified, and approved by a qualified clinician before it reaches the patient. Every action is logged and written to the EHR.</div>
+    </div>
+  </div>
+
+  <!-- THE CONCERN THIS ANSWERS -->
+  <div style="background:var(--navy);border-radius:10px;padding:16px 22px;margin-bottom:16px;display:flex;gap:18px;align-items:flex-start">
+    <div style="font-size:28px;flex-shrink:0">👨‍⚕️</div>
+    <div>
+      <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:5px">The question physicians always ask: "Is the AI doing things to my patients without my input?"</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.7);line-height:1.7">The answer is no — and the platform is architected specifically so this question never has to be asked twice. The AI generates suggestions. The QHCP reviews them, accepts or rejects each one individually, adds their own clinical judgment, and generates the final plan. <strong style="color:#fff">Nothing reaches the patient until a qualified clinician has reviewed and approved it.</strong> Every action is time-stamped, logged to the patient record, and written back to the EHR.</div>
+    </div>
+  </div>
+
+  <!-- CARE HIERARCHY -->
+  <div style="margin-bottom:16px">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:10px">Care hierarchy — established at patient onboarding, visible to all parties at all times</div>
+    <div style="display:flex;align-items:stretch;gap:0;border:1.5px solid var(--border);border-radius:8px;overflow:hidden">
+      <div style="flex:1;padding:14px 16px;background:var(--teal-lt);border-right:1px solid var(--border);text-align:center">
+        <div style="font-size:20px;margin-bottom:6px">🖥</div>
+        <div style="font-size:11px;font-weight:700;color:var(--teal-dk);margin-bottom:4px">SyncVitals Platform</div>
+        <div style="font-size:10px;color:var(--gray);line-height:1.55">Monitors <strong style="color:var(--navy)">BP, SpO₂, glucose, weight, ECG, and temperature</strong> — plus 20+ additional vitals including HRV, spirometry, respiration rate, activity, sleep, and medication adherence. Generates AI care plan suggestions from live readings. Flags deviations against QHCP-set thresholds instantly.</div>
+        <div style="margin-top:8px;font-size:9px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.08em">Proposes · Monitors · Alerts</div>
+      </div>
+      <div style="display:flex;align-items:center;padding:0 8px;font-size:18px;color:var(--teal);background:var(--white)">→</div>
+      <div style="flex:1;padding:14px 16px;background:var(--off);border-right:1px solid var(--border);text-align:center">
+        <div style="font-size:20px;margin-bottom:6px">👩‍⚕️</div>
+        <div style="font-size:11px;font-weight:700;color:var(--navy);margin-bottom:4px">SyncVitals Nurse / PA</div>
+        <div style="font-size:10px;color:var(--gray);line-height:1.5"><strong style="color:var(--green)">Post-discharge:</strong> Performs all 99457/99458 management time, patient outreach, care plan support, escalation routing. All actions logged to EHR.<br><strong style="color:var(--teal)">In-facility:</strong> Device compliance and transition coordination only. No clinical role.</div>
+        <div style="margin-top:8px;font-size:9px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.08em">Monitors · Documents · Escalates</div>
+      </div>
+      <div style="display:flex;align-items:center;padding:0 8px;font-size:18px;color:var(--teal);background:var(--white)">→</div>
+      <div style="flex:1;padding:14px 16px;background:var(--green-lt);text-align:center">
+        <div style="font-size:20px;margin-bottom:6px">👨‍⚕️</div>
+        <div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:4px">Clove Lakes Physician</div>
+        <div style="font-size:10px;color:var(--gray);line-height:1.5">Reviews care plan suggestions. Accepts, rejects, or modifies each AI item individually. Adds their own clinical instructions. Approves final plan. Can escalate to superior within the platform. Full patient record access at all times.</div>
+        <div style="margin-top:8px;font-size:9px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.08em">Decides · Approves · Controls</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QHCP CARE PLAN WORKFLOW -->
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:10px">QHCP care plan workflow — what the physician actually does</div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px">
+
+    <div style="background:var(--warm);border:1.5px solid var(--border);border-top:3px solid var(--teal);border-radius:8px;padding:12px 13px;text-align:center">
+      <div style="font-size:9px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Step 1</div>
+      <div style="font-size:14px;margin-bottom:6px">📋</div>
+      <div style="font-size:11px;font-weight:700;color:var(--navy);margin-bottom:4px">Patient Onboarded</div>
+      <div style="font-size:10px;color:var(--gray);line-height:1.4">Care hierarchy established. Physician assigned. SyncVitals generates initial condition-based care plan from BP, SpO₂, glucose readings and clinical profile.</div>
+    </div>
+
+    <div style="background:var(--warm);border:1.5px solid var(--border);border-top:3px solid var(--teal);border-radius:8px;padding:12px 13px;text-align:center">
+      <div style="font-size:9px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Step 2</div>
+      <div style="font-size:14px;margin-bottom:6px">🔍</div>
+      <div style="font-size:11px;font-weight:700;color:var(--navy);margin-bottom:4px">QHCP Reviews AI Suggestions</div>
+      <div style="font-size:10px;color:var(--gray);line-height:1.4">Physician sees each AI-proposed intervention individually. Nothing is accepted automatically. The QHCP decides what stays, what goes, and what needs their own additions.</div>
+    </div>
+
+    <div style="background:var(--warm);border:1.5px solid var(--border);border-top:3px solid var(--green);border-radius:8px;padding:12px 13px;text-align:center">
+      <div style="font-size:9px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Step 3</div>
+      <div style="font-size:14px;margin-bottom:6px">✏️</div>
+      <div style="font-size:11px;font-weight:700;color:var(--navy);margin-bottom:4px">Accept · Reject · Add</div>
+      <div style="font-size:10px;color:var(--gray);line-height:1.4">Each AI suggestion is individually accepted or rejected. Physician adds their own clinical notes, interventions, and instructions. Their clinical judgment is the final layer — not the AI's.</div>
+    </div>
+
+    <div style="background:var(--warm);border:1.5px solid var(--border);border-top:3px solid var(--green);border-radius:8px;padding:12px 13px;text-align:center">
+      <div style="font-size:9px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Step 4</div>
+      <div style="font-size:14px;margin-bottom:6px">✅</div>
+      <div style="font-size:11px;font-weight:700;color:var(--navy);margin-bottom:4px">QHCP Generates Plan</div>
+      <div style="font-size:10px;color:var(--gray);line-height:1.4">Physician formally approves and generates the final care plan. This action is time-stamped, logged to the patient record, and written back to the EHR. Creates the supervision record for incident-to billing.</div>
+    </div>
+
+    <div style="background:var(--warm);border:1.5px solid var(--border);border-top:3px solid var(--navy);border-radius:8px;padding:12px 13px;text-align:center">
+      <div style="font-size:9px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Ongoing</div>
+      <div style="font-size:14px;margin-bottom:6px">🔔</div>
+      <div style="font-size:11px;font-weight:700;color:var(--navy);margin-bottom:4px">QHCP Stays in the Loop</div>
+      <div style="font-size:10px;color:var(--gray);line-height:1.4">When the platform detects a threshold breach — BP spike, SpO₂ drop, glucose out of range — the alert goes directly to on-site nursing staff and the QHCP via app. No SyncVitals intermediary for in-facility patients. They can access the full patient record at any time and escalate to their superior within the platform.</div>
+    </div>
+
+  </div>
+
+  <!-- WHAT'S MONITORED -->
+
+  <!-- CARE PLAN OUTPUT CALLOUT -->
+  <div style="background:var(--off);border:1.5px solid var(--border);border-top:3px solid var(--green);border-radius:8px;padding:16px 20px;margin-bottom:16px">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--green);margin-bottom:10px">What the QHCP-Approved Care Plan Looks Like — Generated for Every Enrolled Patient</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:12px">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--navy);margin-bottom:6px">The AI generates — the QHCP decides</div>
+        <div style="font-size:11px;color:var(--gray);line-height:1.65;margin-bottom:8px">SyncVitals generates a condition-based 30/60/90 day plan from the patient's live vitals, diagnoses, and medications. The QHCP reviews each suggested intervention, accepts or rejects individually, adds their own clinical instructions, and formally approves the plan. The QHCP can also upload their own care plan protocol — SyncVitals reads it, enriches it with evidence-based additions, and the physician approves the final version.</div>
+        <div style="font-size:11px;color:var(--gray);line-height:1.65"><strong style="color:var(--navy)">Patient receives:</strong> A plain-language personal care plan — named to them, written for them, listing every step in language they can follow. Nurse and physician names are on it. Every action is a checkbox. The plan is theirs to keep.</div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--navy);margin-bottom:6px">What every care plan includes</div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <div style="display:flex;gap:8px;align-items:flex-start;font-size:11px;color:var(--gray)"><span style="color:var(--green);font-weight:700;flex-shrink:0">✓</span>30/60/90 day phased interventions — Stabilization · Optimization · Sustainability</div>
+          <div style="display:flex;gap:8px;align-items:flex-start;font-size:11px;color:var(--gray)"><span style="color:var(--green);font-weight:700;flex-shrink:0">✓</span>Nutrition guidance — DASH diet, sodium limits, food diary, dietitian referral built in</div>
+          <div style="display:flex;gap:8px;align-items:flex-start;font-size:11px;color:var(--gray)"><span style="color:var(--green);font-weight:700;flex-shrink:0">✓</span>Activity progression — step count targets, walking tolerance, seated exercises for limited-mobility patients</div>
+          <div style="display:flex;gap:8px;align-items:flex-start;font-size:11px;color:var(--gray)"><span style="color:var(--green);font-weight:700;flex-shrink:0">✓</span>Medication adherence — daily reminders, non-adherence documentation, escalation triggers</div>
+          <div style="display:flex;gap:8px;align-items:flex-start;font-size:11px;color:var(--gray)"><span style="color:var(--green);font-weight:700;flex-shrink:0">✓</span>Patient education modules — 4 condition-specific lessons in the patient app, completion tracked</div>
+          <div style="display:flex;gap:8px;align-items:flex-start;font-size:11px;color:var(--gray)"><span style="color:var(--green);font-weight:700;flex-shrink:0">✓</span>Appointment schedule — specific days, provider names, purpose, and modality (phone/telehealth/lab)</div>
+          <div style="display:flex;gap:8px;align-items:flex-start;font-size:11px;color:var(--gray)"><span style="color:var(--green);font-weight:700;flex-shrink:0">✓</span>Emergency action plan — exactly when to call the nurse, when to call 911, patient's personal thresholds</div>
+          <div style="display:flex;gap:8px;align-items:flex-start;font-size:11px;color:var(--gray)"><span style="color:var(--green);font-weight:700;flex-shrink:0">✓</span>Lab tracking — GFR, BMP, potassium, lipid panel at Day 80, results feed back into the AI risk model</div>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--green-lt);border:1px solid var(--green-md);border-radius:6px;padding:9px 14px;font-size:11px;color:var(--green);line-height:1.6">
+      <strong>The nutrition and activity elements are not add-ons — they are core to every care plan.</strong> Every HTN patient gets DASH diet guidance, food diary instructions, and a dietitian referral built into their Day 35 appointment. Every CHF patient gets daily weight monitoring with a ≥5 lb crisis trigger. Every Diabetes patient gets glucose targets, carb guidance, and activity progression. These are clinically governed, QHCP-approved, and fully documented.
+    </div>
+  </div>
+
+  <!-- PREDICTION AI CALLOUT -->
+  <div style="background:var(--navy);border-radius:10px;padding:16px 20px;margin-bottom:16px;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start">
+    <div style="font-size:32px;flex-shrink:0">🧠</div>
+    <div>
+      <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:5px">SyncVitals Prediction AI — Live Risk Scoring Across the Full Patient Population</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.7);line-height:1.7;margin-bottom:10px">The Prediction AI runs continuously, evaluating every enrolled patient on a composite risk algorithm — BP, SpO₂, glucose, weight trend, medication adherence, comorbidity weighting, and anomaly detection. It outputs a 0–100 risk score, 48-hour ER probability, and 30-day hospital admission probability per patient, updated every 15 seconds. The QHCP sees the full panel ranked by risk and can query the AI directly as a Cardiologist, Nephrologist, Pulmonologist, or Endocrinologist — each lens applies condition-specific clinical reasoning to the patient's actual vitals.</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+        <div style="background:rgba(255,255,255,.08);border-radius:6px;padding:8px 10px;text-align:center"><div style="font-size:18px;margin-bottom:4px">📊</div><div style="font-size:10px;font-weight:600;color:#fff;margin-bottom:2px">Risk Score 0–100</div><div style="font-size:9px;color:rgba(255,255,255,.5)">Composite · multi-factor · per patient</div></div>
+        <div style="background:rgba(255,255,255,.08);border-radius:6px;padding:8px 10px;text-align:center"><div style="font-size:18px;margin-bottom:4px">🏥</div><div style="font-size:10px;font-weight:600;color:#fff;margin-bottom:2px">48-hr ER Probability</div><div style="font-size:9px;color:rgba(255,255,255,.5)">Color-coded red/amber/green</div></div>
+        <div style="background:rgba(255,255,255,.08);border-radius:6px;padding:8px 10px;text-align:center"><div style="font-size:18px;margin-bottom:4px">📅</div><div style="font-size:10px;font-weight:600;color:#fff;margin-bottom:2px">30-Day Admission Risk</div><div style="font-size:9px;color:rgba(255,255,255,.5)">Trajectory-based · separate model</div></div>
+        <div style="background:rgba(255,255,255,.08);border-radius:6px;padding:8px 10px;text-align:center"><div style="font-size:18px;margin-bottom:4px">💬</div><div style="font-size:10px;font-weight:600;color:#fff;margin-bottom:2px">AI Clinical Chat</div><div style="font-size:9px;color:rgba(255,255,255,.5)">Query by specialist role · live patient context</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray);margin-bottom:10px">Vitals monitored continuously — across all enrolled patients, all conditions</div>
+
+  <!-- Primary 3 -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px">
+    <div style="background:var(--red-lt);border:1.5px solid #F0B0A8;border-radius:8px;padding:12px 14px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="font-size:18px">❤️</span><div><div style="font-size:11px;font-weight:700;color:var(--navy)">Blood Pressure</div><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--red)">HTN · CHF · CAD · Stroke</div></div></div>
+      <div style="font-size:10px;color:var(--gray);line-height:1.5;margin-bottom:6px">The single largest SNF readmission driver. Alerts at SBP ≥160 (Stage 2) and ≥180 (Crisis) — physician interaction becomes clinically necessary and separately billable.</div>
+      <div style="background:#fff;border-radius:4px;padding:5px 8px;font-size:9px;color:var(--red)">Crisis ≥180 · Stage 2 ≥160 · QHCP alerted instantly</div>
+    </div>
+    <div style="background:#EFF6FF;border:1.5px solid #B0CCF0;border-radius:8px;padding:12px 14px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="font-size:18px">🫁</span><div><div style="font-size:11px;font-weight:700;color:var(--navy)">Pulse Oximetry</div><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#2255AA">COPD · CHF · Post-Surgical</div></div></div>
+      <div style="font-size:10px;color:var(--gray);line-height:1.5;margin-bottom:6px">SpO₂ decline is the earliest signal of respiratory decompensation — hours before a patient becomes symptomatic. Critical for Clove Lakes' dedicated Pulmonary program.</div>
+      <div style="background:#fff;border-radius:4px;padding:5px 8px;font-size:9px;color:#2255AA">Crisis &lt;90% · continuous · no manual check needed</div>
+    </div>
+    <div style="background:#FFF8E8;border:1.5px solid #E8D098;border-radius:8px;padding:12px 14px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="font-size:18px">🩸</span><div><div style="font-size:11px;font-weight:700;color:var(--navy)">Blood Glucose / CGM</div><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8A6000">Diabetes · CKD · Metabolic</div></div></div>
+      <div style="font-size:10px;color:var(--gray);line-height:1.5;margin-bottom:6px">Dexcom and FreeStyle Libre integrate directly — continuous monitoring, not finger-stick logs. QHCP sets glucose targets at onboarding, AI monitors 24/7.</div>
+      <div style="background:#fff;border-radius:4px;padding:5px 8px;font-size:9px;color:#8A6000">Crisis &gt;300 · CGM integrated · trends + time-in-range</div>
+    </div>
+  </div>
+
+  <!-- Secondary 4 -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px">
+    <div style="background:var(--purple-lt);border:1.5px solid #C0B8E8;border-radius:8px;padding:10px 12px">
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px"><span style="font-size:15px">⚖️</span><div><div style="font-size:11px;font-weight:700;color:var(--navy)">Weight</div><div style="font-size:9px;color:var(--purple);font-weight:600;text-transform:uppercase;letter-spacing:.05em">CHF · Renal</div></div></div>
+      <div style="font-size:10px;color:var(--gray);line-height:1.4">Daily weight trend. ≥5 lb gain = Crisis. CHF decompensation signal before symptoms appear.</div>
+    </div>
+    <div style="background:#EBF6F8;border:1.5px solid #B0DCE2;border-radius:8px;padding:10px 12px">
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px"><span style="font-size:15px">💓</span><div><div style="font-size:11px;font-weight:700;color:var(--navy)">ECG / Heart Rate</div><div style="font-size:9px;color:var(--teal-dk);font-weight:600;text-transform:uppercase;letter-spacing:.05em">Cardiac · AFib</div></div></div>
+      <div style="font-size:10px;color:var(--gray);line-height:1.4">Single or multi-lead ECG, heart rate, AFib detection. Continuous via wearable or QHCP-initiated on demand.</div>
+    </div>
+    <div style="background:#EAF7F0;border:1.5px solid #A8D8BC;border-radius:8px;padding:10px 12px">
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px"><span style="font-size:15px">💨</span><div><div style="font-size:11px;font-weight:700;color:var(--navy)">Spirometry</div><div style="font-size:9px;color:var(--green);font-weight:600;text-transform:uppercase;letter-spacing:.05em">COPD · Pulmonary</div></div></div>
+      <div style="font-size:10px;color:var(--gray);line-height:1.4">FEV1, FVC, peak expiratory flow. Gold standard for COPD management — directly supports Clove Lakes' Pulmonary program.</div>
+    </div>
+    <div style="background:#FEF4E8;border:1.5px solid #E8C080;border-radius:8px;padding:10px 12px">
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px"><span style="font-size:15px">🌡️</span><div><div style="font-size:11px;font-weight:700;color:var(--navy)">Temperature</div><div style="font-size:9px;color:var(--amber);font-weight:600;text-transform:uppercase;letter-spacing:.05em">Infection · Sepsis</div></div></div>
+      <div style="font-size:10px;color:var(--gray);line-height:1.4">Early infection and sepsis signal. Post-surgical SNF patients at highest risk — fever trend catches deterioration before clinical presentation.</div>
+    </div>
+  </div>
+
+  <!-- Extended 4 -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px">
+    <div style="background:var(--off);border:1px solid var(--border);border-radius:7px;padding:8px 10px">
+      <div style="font-size:10px;font-weight:700;color:var(--navy);margin-bottom:3px">🏃 Activity &amp; Steps</div>
+      <div style="font-size:9px;color:var(--gray);line-height:1.4">Step count, activity duration, calories burned. Feeds care plan progression — QHCP adjusts activity targets from trend data.</div>
+    </div>
+    <div style="background:var(--off);border:1px solid var(--border);border-radius:7px;padding:8px 10px">
+      <div style="font-size:10px;font-weight:700;color:var(--navy);margin-bottom:3px">😴 Sleep</div>
+      <div style="font-size:9px;color:var(--gray);line-height:1.4">Sleep duration and disruption. Often the first behavioral signal before acute deterioration — particularly CHF and COPD patients.</div>
+    </div>
+    <div style="background:var(--off);border:1px solid var(--border);border-radius:7px;padding:8px 10px">
+      <div style="font-size:10px;font-weight:700;color:var(--navy);margin-bottom:3px">💊 Medication Adherence</div>
+      <div style="font-size:9px;color:var(--gray);line-height:1.4">Adherence captured in care plan workflow. Non-adherence is #1 cause of uncontrolled BP — documented for CCM billing.</div>
+    </div>
+    <div style="background:var(--off);border:1px solid var(--border);border-radius:7px;padding:8px 10px">
+      <div style="font-size:10px;font-weight:700;color:var(--navy);margin-bottom:3px">📊 Extended Monitoring</div>
+      <div style="font-size:9px;color:var(--gray);line-height:1.4">HRV · Respiration · Blood ketones · Cholesterol · A1C · Body composition · Urine · Triglycerides · Stress level · and more</div>
+    </div>
+  </div></div>
+
+  <!-- DOCUMENTATION BOX -->
+  <div style="background:var(--off);border:1px solid var(--border);border-left:4px solid var(--green);border-radius:0 8px 8px 0;padding:12px 18px;font-size:11px;color:var(--text);line-height:1.65">
+    <strong style="color:var(--navy)">Every QHCP action creates a compliance and billing record.</strong> Accepting an AI suggestion, rejecting one, adding a clinical note, escalating to a superior — every action is time-stamped, logged to the patient record, and written back to the EHR via FHIR R4. This creates the documented general supervision record required for CMS incident-to billing, and the audit trail required for VBP reviews and DOH surveys — automatically, without any additional documentation burden on the physician.
+  </div>
+</div>
+
+<div id="p-in-facility" style="display:none;padding:32px 48px 56px;overflow-x:hidden;box-sizing:border-box;width:100%">
+<div class="sec">
+  <div class="sec-hdr">
+    <div class="sec-hdr-bar teal"></div>
+    <div><div class="sec-eyebrow">In-Facility RPM at Clove Lakes</div><div class="sec-title">Platform · On-Site Nurses · What SyncVitals Handles — Three Distinct Roles, Zero Overlap</div><div class="sec-sub">Designed to eliminate alert fatigue, eliminate liability ambiguity, and save 40–49 minutes of nurse time per patient per day</div></div>
+  </div>
+
+  <div class="mins-box">
+    <div>
+      <div class="mins-num">49</div>
+      <div class="mins-unit">min / day</div>
+    </div>
+    <div>
+      <div class="mins-title">Where the 49 minutes comes from — and what it means for Clove Lakes specifically</div>
+      <div class="mins-body">This is not an efficiency estimate. It is the <strong>literal time nurses currently spend walking to each patient's room, setting up equipment, performing the manual vital sign reading, and charting the result</strong> — then moving to the next patient and repeating.<br><br>With SyncVitals, <strong>the device reads and transmits automatically. The AI logs the result, flags anything abnormal, and ranks the patient in the triage queue.</strong> The nurse never physically generates the data. That time goes back to patient care.</div>
+      <div class="mins-callout">At Clove Lakes: 283 Medicare residents × 40 min/day (conservative) × $25/hr NY loaded × 365 = <strong>$1,730,191/year recovered in staff time alone</strong> — before any readmission or VBP benefit.</div>
+    </div>
+  </div>
+
+  <div class="role-grid">
+    <div class="role-card rc-platform">
+      <div class="rc-hdr"><span class="rc-icon">🖥</span> SyncVitals Platform</div>
+      <div class="rc-body">
+        <div class="rc-item"><span class="rc-arrow">→</span>Continuous AI risk scores on all 283 MC residents — every 15 seconds</div>
+        <div class="rc-item"><span class="rc-arrow">→</span>48-hr ER probability + 30-day admission probability per patient</div>
+        <div class="rc-item"><span class="rc-arrow">→</span>4-level triage queue: Crisis · Stage 2 · Watch · Stable — auto-sorted</div>
+        <div class="rc-item"><span class="rc-arrow">→</span>Threshold alerts pushed to on-site nurse computer or app instantly</div>
+        <div class="rc-item"><span class="rc-arrow">→</span>AI care plans per patient — update as vitals change</div>
+        <div class="rc-item"><span class="rc-arrow">→</span>Full audit trail for VBP and DOH surveys</div>
+      </div>
+    </div>
+    <div class="role-card rc-onsite">
+      <div class="rc-hdr"><span class="rc-icon">🏥</span> On-Site Clove Lakes Nurses</div>
+      <div class="rc-body">
+        <div class="rc-item"><span class="rc-arrow">→</span>Own ALL clinical response — full authority, full liability</div>
+        <div class="rc-item"><span class="rc-arrow">→</span>Receive Crisis and Stage 2 alerts directly via app — no intermediary</div>
+        <div class="rc-item"><span class="rc-arrow">→</span>Decide when and how to respond physically to any patient</div>
+        <div class="rc-item"><span class="rc-arrow">→</span>Review AI triage queue instead of doing manual vital checks</div>
+        <div class="rc-item"><span class="rc-arrow">→</span>DON monitors full population risk at Command Dashboard level</div>
+      </div>
+    </div>
+    <div class="role-card rc-svnurse">
+      <div class="rc-hdr"><span class="rc-icon">📞</span> SyncVitals — In-Facility Role Only</div>
+      <div class="rc-body">
+        <div class="rc-item"><span class="rc-arrow">→</span>Device compliance — call/text patient when readings are missed; troubleshoot device</div>
+        <div class="rc-item"><span class="rc-arrow">→</span>No clinical monitoring role in-facility — all clinical decisions and responses belong to Clove Lakes on-site staff</div>
+        <div class="rc-item"><span class="rc-arrow">→</span>Transition coordination — identify discharge candidates, initiate Part B enrollment before patient leaves</div>
+        <div class="rc-item"><span class="rc-arrow">→</span>Build patient relationship pre-discharge so post-discharge enrollment is seamless</div>
+      </div>
+    </div>
+    <div class="role-card rc-never">
+      <div class="rc-hdr"><span class="rc-icon">⛔</span> SyncVitals Nurses — Never</div>
+      <div class="rc-body">
+        <div class="rc-item"><span class="rc-arrow">→</span>Provide clinical guidance for in-facility patients — no recommendations</div>
+        <div class="rc-item"><span class="rc-arrow">→</span>Sit between on-site nurse and a Crisis alert — Crisis always goes direct</div>
+        <div class="rc-item"><span class="rc-arrow">→</span>Call patients directly for clinical assessment in-facility</div>
+        <div class="rc-item"><span class="rc-arrow">→</span>Create any liability ambiguity — on-site nurses hold full clinical authority</div>
+      </div>
+    </div>
+  </div>
+
+  <table class="alert-tbl">
+    <thead><tr><th style="width:120px">Alert Level</th><th>On-Site Nurse App</th><th>SyncVitals Nurse</th><th>Who Responds</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge b-crisis">Crisis</span><br><span style="font-size:9px;color:var(--gray)">SBP≥180 · SpO₂&lt;90 · +5lb</span></td><td><span class="chk">✓ Instant direct push</span></td><td>Sees alert · documentation support only</td><td><strong style="color:var(--navy)">On-site nurse — immediate physical response</strong></td></tr>
+      <tr><td><span class="badge b-stage2">Stage 2</span><br><span style="font-size:9px;color:var(--gray)">SBP≥160 · trending</span></td><td><span class="chk">✓ Alert pushed</span> — nurse decides response</td><td style="color:var(--gray-lt)">No role — on-site nurse owns response</td><td>On-site nurse — clinical judgment on response</td></tr>
+      <tr><td><span class="badge b-watch">Watch</span><br><span style="font-size:9px;color:var(--gray)">Borderline · trending</span></td><td>Visible in queue — no push (reduces fatigue)</td><td><span class="chk">✓</span> Monitors · calls patient for device compliance</td><td>SyncVitals nurse (compliance) · on-site (if escalated)</td></tr>
+      <tr><td><span class="badge b-stable">Stable</span></td><td style="color:var(--gray-lt)">Queue only — no alert</td><td style="color:var(--gray-lt)">No action required</td><td style="color:var(--gray-lt)">AI monitors continuously</td></tr>
+    </tbody>
+    <tr><td colspan="4" class="alert-note">Alert fatigue prevention: on-site nurses receive push notifications for Crisis and Stage 2 only. Watch-level patients appear in the triage queue for proactive review — not as interrupting alerts. SyncVitals nurses handle device compliance only — if a patient has not transmitted a reading, SyncVitals troubleshoots the device. All clinical watch-level response is owned by on-site Clove Lakes nursing staff.</td></tr>
+  </table>
+
+  <div class="liability-box">
+    <div class="lb-icon">🤝</div>
+    <div>
+      <div class="lb-title">Designed so your clinical team stays in complete control</div>
+      <div class="lb-body">SyncVitals is built as a partner to Clove Lakes' clinical staff — not a replacement for them. Your nurses and physicians own every clinical decision. <strong>We designed the alert routing, role boundaries, and escalation structure specifically so Clove Lakes' team always has full situational awareness and final authority.</strong> SyncVitals handles the data layer, device compliance, and post-discharge coordination — your clinical team focuses on what they do best. That's the partnership we're offering.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ EHR INTEGRATION ══ -->
+</div>
+
+<div id="p-ehr" style="display:none;padding:32px 48px 56px;overflow-x:hidden;box-sizing:border-box;width:100%">
+<div class="sec">
+  <div class="sec-hdr">
+    <div class="sec-hdr-bar navy"></div>
+    <div><div class="sec-eyebrow">EHR Integration</div><div class="sec-title">Billing Is Seamless — No Double Entry, No Manual Upload</div><div class="sec-sub">SyncVitals integrates via FHIR R4. Patient data flows in. Time logs, care plans, and escalation notes flow back — every CPT claim substantiated automatically.</div></div>
+  </div>
+  <div class="ehr-grid">
+    <div class="ehr-card"><div class="ehr-name">Epic</div><div class="ehr-cert">App Orchard Certified</div><div class="ehr-note">Large health systems and hospital-affiliated SNFs. Bidirectional FHIR R4.</div></div>
+    <div class="ehr-card"><div class="ehr-name">eClinicalWorks</div><div class="ehr-cert">Direct Integration</div><div class="ehr-note">Common in outpatient physician practices — critical for Clove Lakes' outpatient rehab billing.</div></div>
+    <div class="ehr-card"><div class="ehr-name">Oracle Health</div><div class="ehr-cert">Cerner Integration</div><div class="ehr-note">Used by Richmond University Medical Center (2.1mi) — shared patients, connected records.</div></div>
+    <div class="ehr-card"><div class="ehr-name">Athenahealth</div><div class="ehr-cert">Direct Integration</div><div class="ehr-note">Common in cardiology, pulmonology, nephrology — the exact supervising provider types for Clove Lakes' RPM program.</div></div>
+  </div>
+  <div class="ehr-flows">
+    <div class="ehr-flow ehr-in">
+      <div class="ehr-flow-title">← Reads from EHR automatically</div>
+      <div class="ehr-flow-item">Patient demographics &amp; MRN</div>
+      <div class="ehr-flow-item">Active problem list (ICD-10)</div>
+      <div class="ehr-flow-item">Current medication list</div>
+      <div class="ehr-flow-item">Insurance &amp; payer information</div>
+      <div class="ehr-flow-item">Prior hospitalization history</div>
+    </div>
+    <div class="ehr-flow ehr-out">
+      <div class="ehr-flow-title">→ Writes back to EHR automatically</div>
+      <div class="ehr-flow-item">Nursing time logs (99457/99458 documentation)</div>
+      <div class="ehr-flow-item">Interaction notes per patient encounter</div>
+      <div class="ehr-flow-item">Care plan adherence records</div>
+      <div class="ehr-flow-item">Escalation events &amp; physician notifications</div>
+      <div class="ehr-flow-item">Vitals trend data as structured clinical notes</div>
+    </div>
+  </div>
+  <div class="ehr-note-box"><strong>For Clove Lakes' billing team:</strong> CPT 99457 and 99458 require documented time and a live interactive communication each month. SyncVitals nurses log this time automatically, write the encounter note to the EHR, and timestamp the communication. The claim is fully substantiated before it reaches billing. Normal claims submission — nothing additional required.</div>
+</div>
+
+<!-- ══ FINANCIAL MODEL ══ -->
+</div>
+
+<div id="p-financial" style="display:none;padding:32px 48px 56px;overflow-x:hidden;box-sizing:border-box;width:100%">
+<div class="sec">
+  <div class="sec-hdr">
+    <div class="sec-hdr-bar green"></div>
+    <div><div class="sec-eyebrow">Financial Model — Clove Lakes Specific</div><div class="sec-title">Phase A: Operational Savings &nbsp;·&nbsp; Phase B: Part B Revenue Post-Discharge</div></div>
+  </div>
+
+  <div class="phase-block">
+    <div class="ph-hdr ph-teal">Phase A — During Medicare Part A Stay (Bundled · Operational Savings Only)<span class="ph-tag">Cannot bill CMS separately · Cost avoidance</span></div>
+    <div class="ph-body">
+      <div class="p-row"><div class="pl">Lost Part A billing avoided<span class="pb">214 readmissions prevented × $2,900 (PDPM $580/day × 5 hospital days)¹</span></div><div class="pv pos">$620,080</div></div>
+      <div class="p-row"><div class="pl">Staff labor savings — 49 min/day freed from manual vital checks<span class="pb">283 MC pts × 40 min/day × $25/hr NY loaded × 365⁷</span></div><div class="pv pos">$1,730,191</div></div>
+      <div class="p-row"><div class="pl">VBP penalty recovery<span class="pb">$59.9M Medicare revenue × 0.9% multiplier improvement (0.980→0.989)⁴</span></div><div class="pv pos">$539,200</div></div>
+      <div class="p-row"><div class="pl">Referral census recovery — Year 1<span class="pb">3 beds × $440/day blended × 365 × 50% recovery · ramped Yr2/Yr3⁸</span></div><div class="pv pos">$238,710</div></div>
+      <div class="p-row p-sub"><div class="pl">Total Part A savings</div><div class="pv pos">$3,128,181 / yr</div></div>
+      <div class="p-row"><div class="pl">SyncVitals Enterprise fee — in-facility<span class="pb">283 Medicare residents × $85/mo × 12 (in-facility rate)</span></div><div class="pv neg">$(288,660)</div></div>
+      <div class="p-row p-hi"><div class="pl">Net Part A benefit to Clove Lakes</div><div class="pv">$2,839,521 / yr</div></div>
+    </div>
+  </div>
+
+  <div style="background:var(--green-lt);border:1px solid var(--green-md);border-left:4px solid var(--green);border-radius:0 8px 8px 0;padding:11px 16px;margin-bottom:13px;font-size:12px;color:#1A4A2A;line-height:1.6"><strong>Permanent enrollment — not a 4-month program.</strong> Post-discharge Part B RPM patients stay enrolled indefinitely. Only exits: death, hospice, voluntary withdrawal (~22%/year). The enrolled census grows every month. Three billing families stack: RPM + CCM + MNT.</div>
+
+  <div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:7px">Clove Lakes monthly enrollment pipeline — continuous, permanent:</div>
+  <div class="pipeline">
+    <div class="ps"><div class="ps-num">3,973</div><div class="ps-lbl">Annual MC admissions</div><div class="ps-sub">~11/day</div></div>
+    <div class="pa">→</div>
+    <div class="ps"><div class="ps-num">2,860</div><div class="ps-lbl">Discharged home/yr</div><div class="ps-sub">72% · rehab focus</div></div>
+    <div class="pa">→</div>
+    <div class="ps"><div class="ps-num">1,716</div><div class="ps-lbl">Into outpatient rehab</div><div class="ps-sub">60% of home discharges</div></div>
+    <div class="pa">→</div>
+    <div class="ps hi"><div class="ps-num">~125/mo</div><div class="ps-lbl">New Part B enrollments</div><div class="ps-sub">+ 200 existing outpatient patients Day 1</div></div>
+    <div class="pa">→</div>
+    <div class="ps hi"><div class="ps-num">∞</div><div class="ps-lbl">Permanent enrollment</div><div class="ps-sub">~22%/yr attrition only</div></div>
+  </div>
+
+  <div style="background:#EEF3FA;border:1px solid #C0CDE0;border-left:4px solid #0D2B5E;border-radius:0 8px 8px 0;padding:11px 16px;margin-bottom:13px;font-size:12px;color:#1A2638;line-height:1.6">
+  <strong>Two enrollment channels — ongoing discharges and existing outpatient patients:</strong><br><br>
+  <strong>Ongoing (monthly):</strong> With 576 beds and a 28% monthly rotation, Clove Lakes discharges approximately 342 residents per month. Of those, ~330 are billable for Part B RPM across Medicare Traditional, Medicare Advantage, and commercial TPA payers (Aetna covers CHF/DM/HTN; UHC and Cigna cover RPM broadly — exactly the conditions Clove Lakes specializes in). After applying the home discharge and outpatient continuation rates, this yields approximately <strong>~125 new RPM enrollments per month</strong>.<br><br>
+  <strong>Day 1 immediate:</strong> Clove Lakes' active outpatient rehab census is an immediate enrollment opportunity — no waiting for new discharges. Estimated <strong>200 existing outpatient patients</strong> can be enrolled in the first billing cycle, generating revenue from month one.
+</div>
+  <div style="margin-bottom:14px">
+
+    <!-- ZERO EFFORT CALLOUT -->
+    <div style="background:var(--navy);border-radius:10px;padding:16px 22px;margin-bottom:14px;display:flex;gap:18px;align-items:flex-start">
+      <div style="font-size:32px;flex-shrink:0">🤝</div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:6px">Clove Lakes' clinical team does nothing for these codes</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.7);line-height:1.7">SyncVitals nurses supply the device, ensure 16+ days of readings each month, document and perform all management time, and conduct the required live patient interaction. Every requirement for 99454, 99457, and 99458 is met entirely by SyncVitals — <strong style="color:#fff">your nurses and physicians are not in this workflow at all.</strong> No additional staff, no new documentation burden, no change to existing clinical routines.</div>
+      </div>
+    </div>
+
+    <!-- CORE CPT RANGE TABLE -->
+    <div style="border:1.5px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:14px">
+      <div style="background:var(--green);padding:8px 16px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#fff;display:flex;justify-content:space-between;align-items:center">
+        <span>Core RPM Codes — 2026 CMS National Average Rates⁹</span>
+        <span style="font-size:9px;background:rgba(255,255,255,.2);padding:2px 8px;border-radius:3px">Part B outpatient codes · CMS 2026 rates · SyncVitals handles 100%</span>
+      </div>
+      <table style="width:100%;border-collapse:collapse;font-size:11px">
+        <thead>
+          <tr style="background:var(--off)">
+            <th style="padding:7px 14px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gray);border-bottom:1px solid var(--border);width:90px">CPT Code</th>
+            <th style="padding:7px 14px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gray);border-bottom:1px solid var(--border)">What It Covers</th>
+            <th style="padding:7px 14px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gray);border-bottom:1px solid var(--border);width:100px">Who Does It</th>
+            <th style="padding:7px 14px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gray);border-bottom:1px solid var(--border);width:90px">2026 Rate</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:8px 14px;border-bottom:1px solid var(--border-lt)"><span style="font-family:var(--mono);font-weight:700;color:var(--green)">99454</span></td>
+            <td style="padding:8px 14px;border-bottom:1px solid var(--border-lt);color:var(--gray)">Device supply &amp; daily data transmission — 16+ days of readings per 30-day period</td>
+            <td style="padding:8px 14px;border-bottom:1px solid var(--border-lt)"><span style="font-size:9px;font-weight:700;color:var(--teal);background:var(--teal-lt);padding:2px 7px;border-radius:3px">SyncVitals</span></td>
+            <td style="padding:8px 14px;border-bottom:1px solid var(--border-lt);text-align:right;font-weight:700;color:var(--text)">~$47/mo</td>
+          </tr>
+          <tr style="background:var(--warm)">
+            <td style="padding:8px 14px;border-bottom:1px solid var(--border-lt)"><span style="font-family:var(--mono);font-weight:700;color:var(--green)">99457</span></td>
+            <td style="padding:8px 14px;border-bottom:1px solid var(--border-lt);color:var(--gray)">First 20 minutes of clinical management time per calendar month — requires one live patient interaction</td>
+            <td style="padding:8px 14px;border-bottom:1px solid var(--border-lt)"><span style="font-size:9px;font-weight:700;color:var(--teal);background:var(--teal-lt);padding:2px 7px;border-radius:3px">SyncVitals</span></td>
+            <td style="padding:8px 14px;border-bottom:1px solid var(--border-lt);text-align:right;font-weight:700;color:var(--text)">~$52/mo</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 14px;border-bottom:1px solid var(--border-lt)"><span style="font-family:var(--mono);font-weight:700;color:var(--green)">99458 ×1</span></td>
+            <td style="padding:8px 14px;border-bottom:1px solid var(--border-lt);color:var(--gray)">Additional 20-minute management increment — add-on to 99457, billed when 40+ minutes total documented</td>
+            <td style="padding:8px 14px;border-bottom:1px solid var(--border-lt)"><span style="font-size:9px;font-weight:700;color:var(--teal);background:var(--teal-lt);padding:2px 7px;border-radius:3px">SyncVitals</span></td>
+            <td style="padding:8px 14px;border-bottom:1px solid var(--border-lt);text-align:right;font-weight:700;color:var(--text)">~$41/mo</td>
+          </tr>
+          <tr style="background:var(--warm)">
+            <td style="padding:8px 14px;border-bottom:1px solid var(--border-lt)"><span style="font-family:var(--mono);font-weight:700;color:var(--green)">99458 ×2</span></td>
+            <td style="padding:8px 14px;border-bottom:1px solid var(--border-lt);color:var(--gray)">Second additional 20-minute increment — billed when 60+ minutes total documented in the month</td>
+            <td style="padding:8px 14px;border-bottom:1px solid var(--border-lt)"><span style="font-size:9px;font-weight:700;color:var(--teal);background:var(--teal-lt);padding:2px 7px;border-radius:3px">SyncVitals</span></td>
+            <td style="padding:8px 14px;border-bottom:1px solid var(--border-lt);text-align:right;font-weight:700;color:var(--text)">~$41/mo</td>
+          </tr>
+          <!-- Floor -->
+          <tr style="background:var(--teal-lt)">
+            <td style="padding:9px 14px;border-bottom:1px solid var(--border)" colspan="3"><strong style="color:var(--teal-dk)">Floor — 99454 + 99457 + 99458×1 &nbsp;(standard engagement)</strong><span style="font-size:10px;color:var(--gray);margin-left:10px">NY locality typically 10–18% above these national averages</span></td>
+            <td style="padding:9px 14px;border-bottom:1px solid var(--border);text-align:right;font-size:15px;font-weight:700;color:var(--teal-dk)">~$140/mo</td>
+          </tr>
+          <!-- Ceiling -->
+          <tr style="background:var(--green-lt)">
+            <td style="padding:9px 14px" colspan="3"><strong style="color:var(--green)">Baseline max — 99454 + 99457 + 99458×2 &nbsp;(higher-acuity patients · not a ceiling)</strong><span style="font-size:10px;color:var(--gray);margin-left:10px">No ceiling — additional 99458 units, telehealth visits, and escalation-triggered codes add upside beyond this baseline</span></td>
+            <td style="padding:9px 14px;text-align:right;font-size:15px;font-weight:700;color:var(--green)">~$181/mo+</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RANGE VISUAL -->
+    <div style="background:var(--off);border:1.5px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:14px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px">
+      <div style="text-align:center">
+        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);margin-bottom:4px">Floor per patient/month</div>
+        <div style="font-size:28px;font-weight:700;font-family:var(--serif);color:var(--teal-dk)">~$140</div>
+        <div style="font-size:10px;color:var(--gray);margin-top:3px">99454 + 99457 + 99458×1</div>
+        <div style="font-size:10px;color:var(--gray)">Net to Clove Lakes: <strong>~$40/pt/mo</strong></div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:12px;color:var(--gray-lt)">←&nbsp;&nbsp;SyncVitals-documented management time&nbsp;&nbsp;→</div>
+        <div style="height:2px;background:linear-gradient(90deg,var(--teal),var(--green));border-radius:1px;margin:8px 0"></div>
+        <div style="font-size:10px;color:var(--gray-lt);font-style:italic">No ceiling — additional 99458 units, telehealth visits &amp; escalation codes grow revenue further</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);margin-bottom:4px">Baseline max (not a ceiling)</div>
+        <div style="font-size:28px;font-weight:700;font-family:var(--serif);color:var(--green)">~$181+</div>
+        <div style="font-size:10px;color:var(--gray);margin-top:3px">99454 + 99457 + 99458×2</div>
+        <div style="font-size:10px;color:var(--gray)">Net to Clove Lakes: <strong>~$81/pt/mo</strong></div>
+      </div>
+    </div>
+
+    <!-- STATE VARIATION NOTE -->
+    <div style="background:var(--amber-lt);border:1px solid #E8C080;border-left:3px solid var(--amber);border-radius:0 7px 7px 0;padding:9px 14px;margin-bottom:14px;font-size:11px;color:var(--text);line-height:1.6">
+      <strong style="color:var(--amber)">State &amp; locality rates vary.</strong> The rates above are 2026 CMS national averages. New York metropolitan area locality rates are typically <strong>10–18% higher</strong> — meaning Clove Lakes' actual reimbursement per patient could be meaningfully above these figures. Medicare Advantage and commercial TPA rates are negotiated separately and may differ. <em>Verify actual rates with your billing team against your specific payer contracts before building your financial plan.</em>
+    </div>
+
+    <!-- ESCALATION TRIGGERS -->
+    <div style="border:1.5px solid var(--border);border-radius:8px;overflow:hidden">
+      <div style="background:var(--purple-lt);border-bottom:1px solid var(--border);padding:8px 16px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--purple)">When SyncVitals Escalates — Clove Lakes' Physicians Bill These Outpatient Codes Independently</span>
+        <span style="font-size:9px;color:var(--purple);font-style:italic">Your physicians' own revenue — not in the model above</span>
+      </div>
+      <div style="padding:12px 16px;background:var(--white)">
+        <div style="font-size:11px;color:var(--gray);line-height:1.6;margin-bottom:10px">When our nurses identify a patient who needs physician attention and escalate, that interaction creates a separately billable event for <strong style="color:var(--navy)">Clove Lakes' own providers</strong>. SyncVitals does the triage. When our nurses escalate, the QHCP responds — and that response creates a separately billable outpatient event for Clove Lakes' own physicians. These are Part B outpatient codes billed directly by Clove Lakes, not by SyncVitals. The more our AI catches, the more escalation events — and the more additional revenue — Clove Lakes generates beyond the RPM baseline.</div>
+        <table style="width:100%;border-collapse:collapse;font-size:11px">
+          <thead>
+            <tr style="background:var(--off)">
+              <th style="padding:6px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gray);border-bottom:1px solid var(--border);width:90px">Code</th>
+              <th style="padding:6px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gray);border-bottom:1px solid var(--border)">Triggered When</th>
+              <th style="padding:6px 12px;text-align:right;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gray);border-bottom:1px solid var(--border);width:100px">Approx. Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding:7px 12px;border-bottom:1px solid var(--border-lt)"><span style="font-family:var(--mono);font-weight:700;color:var(--purple)">99213/99214</span></td>
+              <td style="padding:7px 12px;border-bottom:1px solid var(--border-lt);color:var(--gray)">Physician or NP conducts a synchronous evaluation of the patient after SyncVitals nurse escalation</td>
+              <td style="padding:7px 12px;border-bottom:1px solid var(--border-lt);text-align:right;font-weight:600">~$110–$175</td>
+            </tr>
+            <tr style="background:var(--warm)">
+              <td style="padding:7px 12px;border-bottom:1px solid var(--border-lt)"><span style="font-family:var(--mono);font-weight:700;color:var(--purple)">98016</span></td>
+              <td style="padding:7px 12px;border-bottom:1px solid var(--border-lt);color:var(--gray)">Brief virtual check-in by physician — patient-initiated or escalation-prompted (replaced G2012 in 2026)</td>
+              <td style="padding:7px 12px;border-bottom:1px solid var(--border-lt);text-align:right;font-weight:600">~$15–$25</td>
+            </tr>
+            <tr>
+              <td style="padding:7px 12px"><span style="font-family:var(--mono);font-weight:700;color:var(--purple)">G2010</span></td>
+              <td style="padding:7px 12px;color:var(--gray)">Physician reviews patient-submitted data (vitals, images) and responds — asynchronous</td>
+              <td style="padding:7px 12px;text-align:right;font-weight:600">~$12–$18</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top:10px;font-size:10px;color:var(--gray-lt);font-style:italic">Additional codes may apply as SyncVitals' Nutrition Portal and AI Care Plan capabilities are evaluated against current CMS billing guidance — we will update Clove Lakes as these are confirmed.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <table class="gt">
+    <thead><tr><th>Period</th><th>New Enrollments</th><th>Active Census</th><th>Monthly Revenue (End)</th><th>Annual Gross</th><th>Net to Clove Lakes</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Year 1</strong> — ramp + 200 Day 1 existing patients</td><td>~125/mo new · +200 Day 1</td><td>200 Day 1 → 1,520 by Dec</td><td>~$366K/mo by Dec</td><td><span class="rev">$1,780,000</span></td><td><span class="net">$652,937</span></td></tr>
+      <tr><td><strong>Year 2</strong></td><td>~125/mo ongoing</td><td>1,520 → 2,578</td><td>~$619K/mo by Dec</td><td><span class="rev">$3,961,370</span></td><td><span class="net">$1,426,972</span></td></tr>
+      <tr><td><strong>Year 3</strong></td><td>~125/mo ongoing</td><td>2,578 → 3,424</td><td>~$821K/mo by Dec</td><td><span class="rev">$5,708,390</span></td><td><span class="net">$2,046,882</span></td></tr>
+      <tr class="tr-tot"><td colspan="4"><strong>3-Year cumulative Part B gross</strong></td><td><strong>$11,449,760</strong></td><td><span style="font-size:10px">$4,126,791 (floor $140) — $8,660,803 (ceiling $181)</span></td></tr>
+      <tr class="tr-ss"><td colspan="3"><strong>Steady state (~Year 5 · 6,830 patients active)</strong></td><td><strong>~$1.0M–$1.4M/month</strong></td><td><strong>~$13.1M–$16.8M/yr</strong></td><td><strong>~$3.3M–$6.7M/yr net</strong></td></tr>
+    </tbody>
+  </table>
+
+  <div class="totals-grid">
+    <div class="tc tc-green"><div class="tc-lbl">Year 1 Net to Clove Lakes</div><div class="tc-val">$3.49M</div><div class="tc-sub">Part A $2.84M + Part B net $0.65M (at $140 floor)</div></div>
+    <div class="tc tc-teal"><div class="tc-lbl">Year 3 Net</div><div class="tc-val">$4.89M</div><div class="tc-sub">Part B growing · upside as management time scales</div></div>
+    <div class="tc tc-amber"><div class="tc-lbl">Payback Period</div><div class="tc-val">2.2 mo</div><div class="tc-sub">Including all SyncVitals fees</div></div>
+    <div class="tc tc-navy"><div class="tc-lbl">3-Year Cumulative Net</div><div class="tc-val">$12.6M</div><div class="tc-sub">Floor estimate · escalation & additional codes add upside</div></div>
+  </div>
+
+  <div class="phase-block">
+    <div class="ph-hdr ph-navy">3-Year P&amp;L — Net to Clove Lakes After All SyncVitals Costs<span class="ph-tag">Steady state ~$3.3M–$6.7M/yr net RPM · escalation codes additional</span></div>
+    <div class="ph-body">
+      <div class="p-row"><div class="pl">Part A operational savings (stable years 1–3)</div><div class="pv pos">$3,128,181 / yr</div></div>
+      <div class="p-row"><div class="pl">Part A SyncVitals fee (Enterprise $85 × 283 pts)</div><div class="pv neg">$(288,660) / yr</div></div>
+      <div class="p-row p-sub"><div class="pl">Part A net (stable)</div><div class="pv pos">$2,839,521 / yr</div></div>
+      <div class="p-row"><div class="pl">Part B gross revenue — RPM + CCM + MNT (growing census)</div><div class="pv pos">$1.78M &nbsp;/&nbsp; $3.96M &nbsp;/&nbsp; $5.71M</div></div>
+      <div class="p-row"><div class="pl">Part B SyncVitals fee ($100/pt/month — nursing included)</div><div class="pv neg">$(1.13M) &nbsp;/&nbsp; $(2.53M) &nbsp;/&nbsp; $(3.66M)</div></div>
+      <div class="p-row p-sub"><div class="pl">Part B net to Clove Lakes</div><div class="pv pos">$0.65M &nbsp;/&nbsp; $1.43M &nbsp;/&nbsp; $2.05M</div></div>
+      <div class="p-row p-hi"><div class="pl">Combined net — Part A + Part B</div><div class="pv">$3.49M &nbsp;/&nbsp; $4.27M &nbsp;/&nbsp; $4.89M</div></div>
+      <div class="p-row"><div class="pl">Year 1 ROI &nbsp;·&nbsp; Payback</div><div class="pv pos">3.5× &nbsp;·&nbsp; 3.5 months (floor) · upside from escalation codes</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ OUTPATIENT ADVANTAGE ══ -->
+</div>
+
+<div id="p-calculator" style="display:none;padding:32px 48px 56px;overflow-x:hidden;box-sizing:border-box;width:100%">
+<div class="sec">
+  <div class="sec-hdr">
+    <div class="sec-hdr-bar green"></div>
+    <div>
+      <div class="sec-eyebrow">Interactive Financial Calculator</div>
+      <div class="sec-title">Calculate Your RPM Revenue — Real-Time Model</div>
+      <div class="sec-sub">Adjust any input below and all projections update instantly. Defaults are set to Clove Lakes' published CMS data.</div>
+    </div>
+  </div>
+
+<style>
+/* ── CALCULATOR STYLES ── */
+.calc-wrap{display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start}
+.calc-inputs{display:flex;flex-direction:column;gap:14px}
+.calc-group{background:var(--warm);border:1.5px solid var(--border);border-radius:10px;overflow:hidden}
+.calc-group-hdr{padding:8px 14px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#fff;display:flex;align-items:center;gap:7px}
+.calc-group-hdr.navy{background:var(--navy)}
+.calc-group-hdr.teal{background:var(--teal)}
+.calc-group-hdr.green{background:var(--green)}
+.calc-group-hdr.amber{background:var(--amber)}
+.calc-group-hdr.purple{background:var(--purple)}
+.calc-field{padding:8px 14px;border-bottom:1px solid var(--border-lt);display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+.calc-field:last-child{border-bottom:none}
+.calc-label{font-size:11px;color:var(--text);line-height:1.35}
+.calc-label small{display:block;font-size:9px;color:var(--gray-lt);margin-top:1px}
+.calc-input-wrap{display:flex;align-items:center;gap:4px;flex-shrink:0}
+.calc-input{width:80px;padding:4px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:11px;font-family:var(--mono);text-align:right;color:var(--navy);background:var(--white);outline:none;transition:border-color .15s}
+.calc-input:focus{border-color:var(--teal)}
+.calc-input.wide{width:100px}
+.calc-unit{font-size:10px;color:var(--gray);white-space:nowrap}
+.calc-slider{width:80px;accent-color:var(--teal);cursor:pointer}
+
+/* Results panel */
+.calc-results{display:flex;flex-direction:column;gap:12px;position:sticky;top:70px}
+
+.res-hero{background:var(--navy);border-radius:10px;padding:16px 18px}
+.res-hero-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.45);margin-bottom:12px}
+.res-hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.res-hero-item{}
+.res-hero-lbl{font-size:9px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.res-hero-val{font-size:22px;font-weight:700;color:#fff;font-family:var(--serif);line-height:1}
+.res-hero-val.green{color:#7FDBA8}
+.res-hero-val.teal{color:#7FD8E8}
+.res-hero-val.amber{color:#FAC88A}
+.res-hero-sub{font-size:9px;color:rgba(255,255,255,.35);margin-top:2px}
+
+.res-block{background:var(--warm);border:1.5px solid var(--border);border-radius:8px;overflow:hidden}
+.res-block-hdr{padding:7px 13px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#fff}
+.res-block-hdr.teal{background:var(--teal)}
+.res-block-hdr.green{background:var(--green)}
+.res-block-hdr.navy{background:var(--navy)}
+.res-row{display:flex;justify-content:space-between;align-items:baseline;padding:6px 13px;border-bottom:1px solid var(--border-lt);font-size:11px;gap:8px}
+.res-row:last-child{border-bottom:none}
+.res-row .rl{color:var(--gray);flex:1}
+.res-row .rv{font-weight:600;color:var(--navy);white-space:nowrap;font-family:var(--mono)}
+.res-row .rv.pos{color:var(--green)}
+.res-row .rv.neg{color:var(--red)}
+.res-row.sub{background:rgba(255,255,255,.7)}
+.res-row.sub .rl{font-weight:700;color:var(--navy)}
+.res-row.sub .rv{font-size:13px}
+.res-row.hi{background:var(--green-lt)}
+.res-row.hi .rl{font-weight:700;color:var(--green)}
+.res-row.hi .rv{font-size:14px;color:var(--green)}
+
+/* Chart */
+.res-chart{background:var(--warm);border:1.5px solid var(--border);border-radius:8px;padding:12px 14px}
+.chart-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);margin-bottom:10px}
+.chart-bars{display:flex;gap:6px;align-items:flex-end;height:80px;margin-bottom:6px}
+.chart-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.chart-bar{width:100%;border-radius:4px 4px 0 0;min-height:4px;transition:height .3s ease}
+.chart-bar-label{font-size:8px;color:var(--gray-lt);text-align:center}
+.chart-bar-val{font-size:9px;font-weight:700;color:var(--navy);font-family:var(--mono);text-align:center}
+
+/* Disclaimer */
+.calc-disclaimer{background:var(--off);border:1px solid var(--border);border-radius:7px;padding:10px 14px;font-size:10px;color:var(--gray-lt);line-height:1.55;font-style:italic;margin-top:4px}
+
+/* Reset button */
+.calc-reset{font-size:10px;color:var(--teal);font-weight:600;cursor:pointer;background:none;border:1px solid var(--teal-md);border-radius:5px;padding:3px 10px;float:right;font-family:inherit}
+.calc-reset:hover{background:var(--teal-lt)}
+</style>
+
+<div class="calc-wrap">
+
+  <!-- ── LEFT: INPUTS ── -->
+  <div class="calc-inputs">
+
+    <!-- Facility -->
+    <div class="calc-group">
+      <div class="calc-group-hdr navy">🏥 Facility Profile <button class="calc-reset" onclick="resetCalc()">Reset to Clove Lakes</button></div>
+      <div class="calc-field">
+        <div class="calc-label">Licensed Beds<small>Total certified SNF beds</small></div>
+        <div class="calc-input-wrap"><input class="calc-input" id="i_beds" type="number" value="576" min="50" max="2000" oninput="calc()"><span class="calc-unit">beds</span></div>
+      </div>
+      <div class="calc-field">
+        <div class="calc-label">Occupancy Rate<small>Avg % of beds occupied</small></div>
+        <div class="calc-input-wrap"><input class="calc-input" id="i_occ" type="number" value="82" min="50" max="100" oninput="calc()"><span class="calc-unit">%</span></div>
+      </div>
+      <div class="calc-field">
+        <div class="calc-label">Medicare % of Census<small>Short-term rehab MC mix</small></div>
+        <div class="calc-input-wrap"><input class="calc-input" id="i_mc_pct" type="number" value="60" min="20" max="90" oninput="calc()"><span class="calc-unit">%</span></div>
+      </div>
+      <div class="calc-field">
+        <div class="calc-label">Avg Medicare Stay<small>Average length of stay (days)</small></div>
+        <div class="calc-input-wrap"><input class="calc-input" id="i_los" type="number" value="26" min="10" max="60" oninput="calc()"><span class="calc-unit">days</span></div>
+      </div>
+      <div class="calc-field">
+        <div class="calc-label">Annual Medicare Revenue<small>Total Part A revenue ($M) — for VBP calc</small></div>
+        <div class="calc-input-wrap"><span class="calc-unit">$</span><input class="calc-input wide" id="i_mc_rev" type="number" value="59.9" min="1" max="500" step="0.1" oninput="calc()"><span class="calc-unit">M</span></div>
+      </div>
+    </div>
+
+    <!-- Clinical -->
+    <div class="calc-group">
+      <div class="calc-group-hdr teal">📊 Clinical Benchmarks</div>
+      <div class="calc-field">
+        <div class="calc-label">30-Day Readmission Rate<small>Current facility rate (national avg ~23%)</small></div>
+        <div class="calc-input-wrap"><input class="calc-input" id="i_readmit" type="number" value="23" min="5" max="50" step="0.5" oninput="calc()"><span class="calc-unit">%</span></div>
+      </div>
+      <div class="calc-field">
+        <div class="calc-label">Avg Hospital Days per Readmit<small>Lost PDPM billing days per readmission</small></div>
+        <div class="calc-input-wrap"><input class="calc-input" id="i_hosp_days" type="number" value="5" min="1" max="20" oninput="calc()"><span class="calc-unit">days</span></div>
+      </div>
+      <div class="calc-field">
+        <div class="calc-label">PDPM Daily Rate<small>Avg NY metro reimbursement per day</small></div>
+        <div class="calc-input-wrap"><span class="calc-unit">$</span><input class="calc-input wide" id="i_pdpm" type="number" value="580" min="200" max="1200" oninput="calc()"></div>
+      </div>
+      <div class="calc-field">
+        <div class="calc-label">RPM Readmission Reduction<small>Expected reduction from RPM monitoring (conservative 30%)</small></div>
+        <div class="calc-input-wrap"><input class="calc-input" id="i_readmit_red" type="number" value="30" min="10" max="75" oninput="calc()"><span class="calc-unit">%</span></div>
+      </div>
+      <div class="calc-field">
+        <div class="calc-label">VBP Multiplier Improvement<small>Expected CMS performance multiplier gain</small></div>
+        <div class="calc-input-wrap"><input class="calc-input" id="i_vbp" type="number" value="0.9" min="0.1" max="2" step="0.1" oninput="calc()"><span class="calc-unit">%</span></div>
+      </div>
+    </div>
+
+    <!-- Outpatient / Enrollment -->
+    <div class="calc-group">
+      <div class="calc-group-hdr green">🏃 Outpatient & Enrollment</div>
+      <div class="calc-field">
+        <div class="calc-label">% Discharged Home<small>Medicare patients going home (not LTC)</small></div>
+        <div class="calc-input-wrap"><input class="calc-input" id="i_home" type="number" value="72" min="20" max="95" oninput="calc()"><span class="calc-unit">%</span></div>
+      </div>
+      <div class="calc-field">
+        <div class="calc-label">% Into Outpatient Rehab<small>Of home discharges entering your OPT program</small></div>
+        <div class="calc-input-wrap"><input class="calc-input" id="i_opt" type="number" value="65" min="10" max="95" oninput="calc()"><span class="calc-unit">%</span></div>
+      </div>
+      <div class="calc-field">
+        <div class="calc-label">RPM Enrollment Rate<small>Of outpatient patients who enroll in RPM</small></div>
+        <div class="calc-input-wrap"><input class="calc-input" id="i_enroll" type="number" value="65" min="10" max="95" oninput="calc()"><span class="calc-unit">%</span></div>
+      </div>
+      <div class="calc-field">
+        <div class="calc-label">Existing Outpatient Census<small>Active outpatients eligible for Day 1 enrollment</small></div>
+        <div class="calc-input-wrap"><input class="calc-input" id="i_existing" type="number" value="200" min="0" max="2000" oninput="calc()"><span class="calc-unit">pts</span></div>
+      </div>
+      <div class="calc-field">
+        <div class="calc-label">Annual Patient Attrition<small>% leaving program per year (death/hospice/voluntary)</small></div>
+        <div class="calc-input-wrap"><input class="calc-input" id="i_attrit" type="number" value="22" min="5" max="40" oninput="calc()"><span class="calc-unit">%</span></div>
+      </div>
+    </div>
+
+    <!-- Revenue & Fees -->
+    <div class="calc-group">
+      <div class="calc-group-hdr amber">💰 Revenue & SyncVitals Fees</div>
+      <div class="calc-field">
+        <div class="calc-label">RPM Revenue per Patient/Month<small>Part B billing — range $140–$181+/pt/mo</small></div>
+        <div class="calc-input-wrap"><span class="calc-unit">$</span><input class="calc-input wide" id="i_rpm_rev" type="number" value="155" min="140" max="250" oninput="calc()"><span class="calc-unit">/pt/mo</span></div>
+      </div>
+      <div class="calc-field">
+        <div class="calc-label">SyncVitals In-Facility Fee<small>Enterprise tier (101–300 pts)</small></div>
+        <div class="calc-input-wrap"><span class="calc-unit">$</span><input class="calc-input wide" id="i_sv_pa" type="number" value="85" min="50" max="150" oninput="calc()"><span class="calc-unit">/pt/mo</span></div>
+      </div>
+      <div class="calc-field">
+        <div class="calc-label">SyncVitals Post-Discharge Fee<small>Nursing included — 99457/99458 management</small></div>
+        <div class="calc-input-wrap"><span class="calc-unit">$</span><input class="calc-input wide" id="i_sv_pb" type="number" value="100" min="50" max="150" oninput="calc()"><span class="calc-unit">/pt/mo</span></div>
+      </div>
+      <div class="calc-field">
+        <div class="calc-label">Device Setup Fee (99453)<small>One-time per enrolled patient</small></div>
+        <div class="calc-input-wrap"><span class="calc-unit">$</span><input class="calc-input" id="i_setup" type="number" value="22" min="0" max="60" oninput="calc()"></div>
+      </div>
+    </div>
+
+    <!-- Staff -->
+    <div class="calc-group">
+      <div class="calc-group-hdr purple">⏱ Staff Time Savings</div>
+      <div class="calc-field">
+        <div class="calc-label">Time Saved per Patient/Day<small>Manual vital monitoring eliminated (min)</small></div>
+        <div class="calc-input-wrap"><input class="calc-input" id="i_time" type="number" value="40" min="10" max="60" oninput="calc()"><span class="calc-unit">min</span></div>
+      </div>
+      <div class="calc-field">
+        <div class="calc-label">Loaded Nurse Hourly Rate<small>CNA/LPN fully loaded wage (NY metro)</small></div>
+        <div class="calc-input-wrap"><span class="calc-unit">$</span><input class="calc-input" id="i_wage" type="number" value="25" min="15" max="60" oninput="calc()"><span class="calc-unit">/hr</span></div>
+      </div>
+    </div>
+
+  </div><!-- /inputs -->
+
+  <!-- ── RIGHT: RESULTS ── -->
+  <div class="calc-results">
+
+    <!-- Hero numbers -->
+    <div class="res-hero">
+      <div class="res-hero-title">Your Estimated RPM Impact</div>
+      <div class="res-hero-grid">
+        <div class="res-hero-item">
+          <div class="res-hero-lbl">Year 1 Net</div>
+          <div class="res-hero-val green" id="r_y1_net">$4.44M</div>
+          <div class="res-hero-sub" id="r_y1_sub">Part A + Part B combined</div>
+        </div>
+        <div class="res-hero-item">
+          <div class="res-hero-lbl">3-Year Cumulative Net</div>
+          <div class="res-hero-val teal" id="r_3yr_net">$16.4M</div>
+          <div class="res-hero-sub">After all SyncVitals fees</div>
+        </div>
+        <div class="res-hero-item">
+          <div class="res-hero-lbl">Payback Period</div>
+          <div class="res-hero-val amber" id="r_payback">2.9 mo</div>
+          <div class="res-hero-sub">From program launch</div>
+        </div>
+        <div class="res-hero-item">
+          <div class="res-hero-lbl">Steady-State Net/Year</div>
+          <div class="res-hero-val green" id="r_ss_net">$11.4M</div>
+          <div class="res-hero-sub" id="r_ss_sub">~6,830 patients active</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bar chart -->
+    <div class="res-chart">
+      <div class="chart-title">Combined Net — Part A + Part B</div>
+      <div class="chart-bars" id="chart_bars"></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">
+        <div style="display:flex;align-items:center;gap:4px"><div style="width:10px;height:10px;border-radius:2px;background:var(--teal)"></div><span style="font-size:8px;color:var(--gray)">Part A net</span></div>
+        <div style="display:flex;align-items:center;gap:4px"><div style="width:10px;height:10px;border-radius:2px;background:var(--green)"></div><span style="font-size:8px;color:var(--gray)">Part B net</span></div>
+      </div>
+    </div>
+
+    <!-- Part A breakdown -->
+    <div class="res-block">
+      <div class="res-block-hdr teal">Phase A — Operational Savings (in-facility)</div>
+      <div class="res-row"><span class="rl">Readmissions prevented/month</span><span class="rv pos" id="r_readmit_prev">—</span></div>
+      <div class="res-row"><span class="rl">Lost billing avoided (annual)</span><span class="rv pos" id="r_lost_bill">—</span></div>
+      <div class="res-row"><span class="rl">Staff time savings (annual)</span><span class="rv pos" id="r_staff_save">—</span></div>
+      <div class="res-row"><span class="rl">VBP penalty recovery (annual)</span><span class="rv pos" id="r_vbp">—</span></div>
+      <div class="res-row"><span class="rl">Referral census recovery Yr1</span><span class="rv pos" id="r_referral">—</span></div>
+      <div class="res-row sub"><span class="rl">Total Part A savings</span><span class="rv pos" id="r_pa_gross">—</span></div>
+      <div class="res-row"><span class="rl">SyncVitals in-facility fee</span><span class="rv neg" id="r_sv_pa_cost">—</span></div>
+      <div class="res-row hi"><span class="rl">Part A net / year</span><span class="rv" id="r_pa_net">—</span></div>
+    </div>
+
+    <!-- Enrollment pipeline -->
+    <div class="res-block">
+      <div class="res-block-hdr green">Phase B — Enrollment Pipeline</div>
+      <div class="res-row"><span class="rl">Medicare census</span><span class="rv" id="r_mc_census">—</span></div>
+      <div class="res-row"><span class="rl">Monthly Medicare discharges</span><span class="rv" id="r_mc_dis">—</span></div>
+      <div class="res-row"><span class="rl">Monthly home discharges</span><span class="rv" id="r_home_dis">—</span></div>
+      <div class="res-row"><span class="rl">Monthly into outpatient</span><span class="rv" id="r_opt_dis">—</span></div>
+      <div class="res-row sub"><span class="rl">New RPM enrollments/month</span><span class="rv pos" id="r_new_enroll">—</span></div>
+      <div class="res-row"><span class="rl">Day 1 existing patients</span><span class="rv pos" id="r_day1">—</span></div>
+      <div class="res-row"><span class="rl">Steady-state active census</span><span class="rv" id="r_ss_census">—</span></div>
+    </div>
+
+    <!-- Part B breakdown -->
+    <div class="res-block">
+      <div class="res-block-hdr green">Phase B — Part B Revenue</div>
+      <div class="res-row"><span class="rl">Net per patient/month (after SV fee)</span><span class="rv pos" id="r_net_pt">—</span></div>
+      <div class="res-row"><span class="rl">Year 1 — active census by Dec</span><span class="rv" id="r_y1_census">—</span></div>
+      <div class="res-row"><span class="rl">Year 1 Part B gross</span><span class="rv pos" id="r_y1_pb_gross">—</span></div>
+      <div class="res-row"><span class="rl">Year 1 Part B net</span><span class="rv pos" id="r_y1_pb_net">—</span></div>
+      <div class="res-row"><span class="rl">Year 2 Part B net</span><span class="rv pos" id="r_y2_pb_net">—</span></div>
+      <div class="res-row sub"><span class="rl">Year 3 Part B net</span><span class="rv pos" id="r_y3_pb_net">—</span></div>
+    </div>
+
+    <!-- Combined P&L -->
+    <div class="res-block">
+      <div class="res-block-hdr navy">Combined P&L — Net to Your Facility</div>
+      <div class="res-row"><span class="rl">Year 1 (Part A + Part B)</span><span class="rv pos" id="r_c1">—</span></div>
+      <div class="res-row"><span class="rl">Year 2</span><span class="rv pos" id="r_c2">—</span></div>
+      <div class="res-row sub"><span class="rl">Year 3</span><span class="rv pos" id="r_c3">—</span></div>
+      <div class="res-row hi"><span class="rl">3-Year cumulative net</span><span class="rv" id="r_cumul">—</span></div>
+      <div class="res-row"><span class="rl">ROI Year 1</span><span class="rv pos" id="r_roi">—</span></div>
+      <div class="res-row"><span class="rl">Payback period</span><span class="rv pos" id="r_payback2">—</span></div>
+    </div>
+
+    <div class="calc-disclaimer">
+      These projections are estimates based on published CMS data, peer-reviewed research, and the inputs above. Actual results depend on facility implementation quality, patient enrollment rates, payer contract terms, provider supervision structure, and regulatory compliance. Part B incident-to billing requires documented general physician supervision. This calculator does not constitute a guarantee of financial results. Verify rates with your billing team.
+    </div>
+
+  </div><!-- /results -->
+</div><!-- /calc-wrap -->
+
+<script>
+var DEFAULTS = {
+  beds:576, occ:82, mc_pct:60, los:26, mc_rev:59.9,
+  readmit:23, hosp_days:5, pdpm:580, readmit_red:30, vbp:0.9,
+  home:72, opt:65, enroll:65, existing:200, attrit:22,
+  rpm_rev:155, sv_pa:85, sv_pb:100, setup:22,
+  time:40, wage:25
+};
+
+function g(id){ return parseFloat(document.getElementById('i_'+id).value)||0; }
+function s(id, val){ var el=document.getElementById('r_'+id); if(el) el.textContent=val; }
+
+function fmt(n, prefix){
+  prefix = prefix||'$';
+  if(Math.abs(n)>=1e6) return prefix+(n/1e6).toFixed(2)+'M';
+  if(Math.abs(n)>=1000) return prefix+(n/1000).toFixed(0)+'K';
+  return prefix+Math.round(n).toLocaleString();
+}
+function fmtK(n){ return '$'+(n/1000).toFixed(0)+'K'; }
+function pct(n){ return n.toFixed(1)+'%'; }
+function num(n){ return Math.round(n).toLocaleString(); }
+
+function calc(){
+  // ── INPUTS ──
+  var beds        = g('beds');
+  var occ         = g('occ')/100;
+  var mc_pct      = g('mc_pct')/100;
+  var los         = g('los');
+  var mc_rev_m    = g('mc_rev')*1e6;
+  var readmit_r   = g('readmit')/100;
+  var hosp_days   = g('hosp_days');
+  var pdpm        = g('pdpm');
+  var readmit_red = g('readmit_red')/100;
+  var vbp_imp     = g('vbp')/100;
+  var pct_home    = g('home')/100;
+  var pct_opt     = g('opt')/100;
+  var enroll_r    = g('enroll')/100;
+  var existing    = g('existing');
+  var attrit_ann  = g('attrit')/100;
+  var rpm_rev     = g('rpm_rev');
+  var sv_pa       = g('sv_pa');
+  var sv_pb       = g('sv_pb');
+  var setup_fee   = g('setup');
+  var mins_saved  = g('time');
+  var wage        = g('wage');
+
+  // ── PART A CALCULATIONS ──
+  var mc_census       = Math.round(beds * occ * mc_pct);
+  var monthly_turns   = 30 / los;
+  var mc_dis_mo       = mc_census * monthly_turns;
+  var mc_dis_yr       = mc_dis_mo * 12;
+  
+  // Readmissions
+  var readmit_total   = mc_dis_yr * readmit_r;
+  var readmit_prev    = readmit_total * readmit_red;
+  var lost_bill       = readmit_prev * pdpm * hosp_days;
+
+  // Staff savings
+  var staff_save      = mc_census * (mins_saved/60) * wage * 365;
+
+  // VBP recovery
+  var vbp_rec         = mc_rev_m * vbp_imp;
+
+  // Referral recovery (3 beds, blended $440, 50% recovery, yr1)
+  var ref_rate        = pdpm * 0.76; // blended approx
+  var referral        = 3 * ref_rate * 365 * 0.5;
+
+  var pa_gross        = lost_bill + staff_save + vbp_rec + referral;
+  var pa_sv_cost      = mc_census * sv_pa * 12;
+  var pa_net          = pa_gross - pa_sv_cost;
+
+  // ── ENROLLMENT PIPELINE ──
+  var home_dis_mo     = mc_dis_mo * pct_home;
+  var opt_dis_mo      = home_dis_mo * pct_opt;
+  var new_per_mo      = opt_dis_mo * enroll_r;
+  var attrit_mo       = attrit_ann / 12;
+  var ss_census       = new_per_mo / attrit_mo;
+
+  // ── PART B SIMULATION (3 years + steady state) ──
+  var active = existing;
+  var b1=0, b2=0, b3=0, c1=0, c2=0, c3=0;
+  var a1=0, a2=0, a3=0;
+  var rev_mo_arr=[];
+
+  for(var mo=1; mo<=36; mo++){
+    active = active*(1-attrit_mo) + new_per_mo;
+    var mo_rev  = setup_fee*new_per_mo + active*rpm_rev;
+    var mo_cost = active*sv_pb;
+    var mo_net  = mo_rev - mo_cost;
+    rev_mo_arr.push({gross:mo_rev, net:mo_net, active:active});
+    if(mo<=12){ b1+=mo_rev; c1+=mo_net; a1=active; }
+    else if(mo<=24){ b2+=mo_rev; c2+=mo_net; a2=active; }
+    else { b3+=mo_rev; c3+=mo_net; a3=active; }
+  }
+
+  var ss_gross_yr  = (ss_census * rpm_rev + new_per_mo*setup_fee)*12;
+  var ss_cost_yr   = ss_census * sv_pb * 12;
+  var ss_net_yr    = ss_gross_yr - ss_cost_yr;
+
+  // ── COMBINED ──
+  var tot_y1       = pa_net + c1;
+  var tot_y2       = pa_net + c2;
+  var tot_y3       = pa_net + c3;
+  var cumul        = tot_y1 + tot_y2 + tot_y3;
+  var sv_cost_y1   = pa_sv_cost + rev_mo_arr.slice(0,12).reduce((s,r)=>s+r.gross-r.net,0);
+  var ben_y1       = pa_gross + b1;
+  var roi          = sv_cost_y1 > 0 ? ben_y1/sv_cost_y1 : 0;
+  var payback      = sv_cost_y1 > 0 ? sv_cost_y1/(ben_y1/12) : 0;
+  var ss_combined  = pa_net + ss_net_yr;
+
+  // ── UPDATE UI ──
+  // Hero
+  document.getElementById('r_y1_net').textContent   = fmt(tot_y1);
+  document.getElementById('r_3yr_net').textContent   = fmt(cumul);
+  document.getElementById('r_payback').textContent   = payback.toFixed(1)+' mo';
+  document.getElementById('r_ss_net').textContent    = fmt(ss_combined);
+  document.getElementById('r_ss_sub').textContent    = '~'+num(Math.round(ss_census))+' patients active';
+  document.getElementById('r_y1_sub').textContent    = 'Part A '+fmt(pa_net)+' + Part B '+fmt(c1);
+
+  // Part A
+  s('readmit_prev', num(Math.round(readmit_prev/12))+'  prevented/mo  ·  '+num(Math.round(readmit_prev))+'/yr');
+  s('lost_bill',    fmt(lost_bill));
+  s('staff_save',   fmt(staff_save));
+  s('vbp',          fmt(vbp_rec));
+  s('referral',     fmt(referral));
+  s('pa_gross',     fmt(pa_gross)+' / yr');
+  s('sv_pa_cost',   '('+fmt(pa_sv_cost)+')');
+  s('pa_net',       fmt(pa_net)+' / yr');
+
+  // Pipeline
+  s('mc_census',    num(mc_census)+' residents');
+  s('mc_dis',       num(Math.round(mc_dis_mo))+' / month');
+  s('home_dis',     num(Math.round(home_dis_mo))+' / month');
+  s('opt_dis',      num(Math.round(opt_dis_mo))+' / month');
+  s('new_enroll',   num(Math.round(new_per_mo))+' / month  ·  '+num(Math.round(new_per_mo*12))+'/yr');
+  s('day1',         num(existing)+' patients (immediate)');
+  s('ss_census',    num(Math.round(ss_census))+' active patients');
+
+  // Part B
+  var net_pt = rpm_rev - sv_pb;
+  s('net_pt',       '$'+net_pt.toFixed(0)+'/pt/mo  ('+fmt(rpm_rev)+' gross − $'+sv_pb+' SV)');
+  s('y1_census',    num(Math.round(a1))+' patients');
+  s('y1_pb_gross',  fmt(b1));
+  s('y1_pb_net',    fmt(c1));
+  s('y2_pb_net',    fmt(c2));
+  s('y3_pb_net',    fmt(c3));
+
+  // Combined
+  s('c1',  fmt(tot_y1));
+  s('c2',  fmt(tot_y2));
+  s('c3',  fmt(tot_y3));
+  s('cumul', fmt(cumul));
+  s('roi',   roi.toFixed(1)+'× benefit-to-cost');
+  s('payback2', payback.toFixed(1)+' months');
+  s('payback',   payback.toFixed(1)+' mo');
+
+  // Chart
+  drawChart(pa_net, c1, pa_net, c2, pa_net, c3, pa_net, ss_net_yr, cumul);
+}
+
+function drawChart(pa1,pb1, pa2,pb2, pa3,pb3, pa_ss,pb_ss, cumul){
+  var bars = document.getElementById('chart_bars');
+  if(!bars) return;
+  var data = [
+    {lbl:'Year 1', pa:pa1, pb:pb1},
+    {lbl:'Year 2', pa:pa2, pb:pb2},
+    {lbl:'Year 3', pa:pa3, pb:pb3},
+    {lbl:'Yr5 SS', pa:pa_ss, pb:pb_ss},
+  ];
+  var maxVal = Math.max(...data.map(d=>d.pa+d.pb));
+  var chartH = 72; // px
+  
+  bars.innerHTML = data.map(function(d){
+    var tot = d.pa + d.pb;
+    var paH = Math.max(2, Math.round((d.pa/maxVal)*chartH));
+    var pbH = Math.max(2, Math.round((d.pb/maxVal)*chartH));
+    var totH = paH + pbH;
+    return '<div class="chart-bar-wrap" style="height:'+(chartH+30)+'px;justify-content:flex-end">'
+      +'<div class="chart-bar-val">'+fmt(tot)+'</div>'
+      +'<div style="width:100%;display:flex;flex-direction:column;align-items:stretch">'
+      +'<div class="chart-bar" style="height:'+pbH+'px;background:var(--green)"></div>'
+      +'<div class="chart-bar" style="height:'+paH+'px;background:var(--teal);border-radius:0"></div>'
+      +'</div>'
+      +'<div class="chart-bar-label">'+d.lbl+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+function resetCalc(){
+  Object.keys(DEFAULTS).forEach(function(k){
+    var el = document.getElementById('i_'+k);
+    if(el) el.value = DEFAULTS[k];
+  });
+  calc();
+}
+
+// Run on load
+calc();
+</script>
+
+</div><!-- /sec -->
+
+</div>
+
+<div id="p-outpatient" style="display:none;padding:32px 48px 56px;overflow-x:hidden;box-sizing:border-box;width:100%">
+<div class="sec">
+  <div class="sec-hdr">
+    <div class="sec-hdr-bar purple"></div>
+    <div><div class="sec-eyebrow">Clove Lakes Outpatient Program</div><div class="sec-title">Every Part B RPM Requirement Is Already Met — No New Infrastructure</div></div>
+  </div>
+  <table class="adv-t">
+    <thead><tr><th>Part B RPM Billing Requires</th><th>Most SNFs — Starting From Zero</th><th>Clove Lakes + SyncVitals ✓</th></tr></thead>
+    <tbody>
+      <tr><td>Supervising physician, NP, or PA (incident-to)</td><td>Must recruit or contract new provider group</td><td>Full-time physiatrist + cardiologists, pulmonologists, nephrologists on staff. SyncVitals nurses work under general supervision. ✓</td></tr>
+      <tr><td>Clinical management time (99457 — 20 min/month)</td><td>Must hire dedicated RPM coordinators</td><td>SyncVitals nursing staff handle all 99457/99458 management time documentation, included in $100/pt/month post-discharge fee. ✓</td></tr>
+      <tr><td>Established patient relationship (12 months)</td><td>Must build panel from community referrals</td><td>Every outpatient rehab patient was a Clove Lakes inpatient. Relationship pre-exists discharge. ✓</td></tr>
+      <tr><td>Medicare Part B billing infrastructure</td><td>Must enroll payers, build new claim workflow</td><td>Already billing Part B for PT/OT/ST. SyncVitals EHR integration adds RPM codes to existing workflow. ✓</td></tr>
+      <tr><td>FDA-cleared connected device for 99454</td><td>Must source, configure, distribute to patients</td><td>SyncVitals cellular devices ship direct to patient home. Dexcom and 700+ patient-owned devices also supported. ✓</td></tr>
+      <tr><td>Patient enrollment and onboarding</td><td>Must identify and enroll from unknown pool</td><td>SyncVitals nurses enroll eligible patients before discharge from Clove Lakes. Pipeline is automatic. ✓</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══ NEXT STEPS ══ -->
+</div>
+
+<div id="p-next-steps" style="display:none;padding:32px 48px 56px;overflow-x:hidden;box-sizing:border-box;width:100%">
+<div class="sec">
+  <div class="sec-hdr">
+    <div class="sec-hdr-bar amber"></div>
+    <div><div class="sec-eyebrow">Implementation</div><div class="sec-title">Four Steps from Decision to First Billing Cycle</div></div>
+  </div>
+  <div class="steps-grid">
+    <div class="step" data-n="1"><div class="step-n">Step 01</div><div class="step-title">Execute SyncVitals BAA &amp; agreement</div><div class="step-body">HIPAA BAA and managed service agreement. Physiatrist designated as supervising provider. Pricing confirmed: $85/pt/month in-facility (Enterprise tier) · $100/pt/month post-discharge (nursing included).</div></div>
+    <div class="step" data-n="2"><div class="step-n">Step 02</div><div class="step-title">EHR integration &amp; billing codes</div><div class="step-body">SyncVitals connects to Clove Lakes' EHR via FHIR R4. Billing team adds 2026 RPM, CCM, and MNT CPT codes to existing Part B claims workflow. One setup, no ongoing manual work.</div></div>
+    <div class="step" data-n="3"><div class="step-n">Step 03</div><div class="step-title">15-patient pilot cohort</div><div class="step-body">SyncVitals nurses enroll 15 highest-risk Medicare discharges — pulmonary, cardiac, diabetic. Devices ship to patient homes within 48 hours. Command Dashboard goes live on all 283 MC residents simultaneously.</div></div>
+    <div class="step" data-n="4"><div class="step-n">Step 04</div><div class="step-title">Scale to full census</div><div class="step-body">93 new enrollments per month compounding indefinitely. At steady state: ~5,073 former Clove Lakes patients generating ~$9.4M/year net. Part A $2.84M/year in parallel.</div></div>
+  </div>
+</div>
+
+<!-- ══ CITATIONS ══ -->
+<div class="citations">
+  <div class="cite-hdr">Sources &amp; Citations — All estimates derived from published, peer-reviewed, and CMS-issued data</div>
+  <ul class="cite-list">
+    <li><span class="cn">1</span><span><strong>MedPAC Report to Congress, 2024.</strong> Average PDPM daily rate ~$580/day NY metro; avg short-term rehab SNF length of stay ~26 days; Medicare census mix 55–65% for rehab-focused facilities.</span></li>
+    <li><span class="cn">2</span><span><strong>CMS Care Compare / Nursing Home Compare, 2024–2026.</strong> Clove Lakes CMS #335239: 576 certified beds; avg daily census ~472; 4-star CMS overall; 5-star Quality Measures; 3.52 nursing hrs/resident/day vs 3.87 national average. Sources: CareListings.com, NursingHomeDatabase.com, Medicare.gov.</span></li>
+    <li><span class="cn">3</span><span><strong>HealthStream / CMS Claims Analysis, 2023.</strong> ~78% of SNF hospital readmissions are estimated as potentially avoidable with early clinical intervention.</span></li>
+    <li><span class="cn">4</span><span><strong>CMS SNF VBP Final Rule FY2025.</strong> 74% of SNFs penalized; 2% of Medicare Part A withheld and redistributed by readmission performance. Model: 0.9% multiplier improvement (0.980→0.989). At Clove Lakes' ~$59.9M Medicare revenue = $539,200 recovered.</span></li>
+    <li><span class="cn">5</span><span><strong>Geneia @Home RPM Pilot, 2022.</strong> 45% hospital admission reduction (cardiac); 96% patient satisfaction. Conservative base: 30%. Mahalo Health / Lakeside Nursing Center (2023): 71% reduction (17%→&lt;5%).</span></li>
+    <li><span class="cn">6</span><span><strong>CMS National SNF Data, 2024.</strong> National 30-day readmission rate ~23%. Short-term rehab SNFs discharge 65–75%+ of Medicare residents home; 72% applied given Clove Lakes' rehabilitation-first model.</span></li>
+    <li><span class="cn">7</span><span><strong>PMC11223723 — Time-Motion Study, Ramaiah Hospital, 2024.</strong> Peer-reviewed: nurses using RPM saved ~49 minutes per patient per day — representing the literal time eliminated from physical room visits, equipment setup, manual readings, and charting. Model uses 40 min (0.67 hrs) conservative. NY metro fully-loaded CNA/LPN wage ~$25/hr (BLS 2024).</span></li>
+    <li><span class="cn">8</span><span><strong>CMS Hospital Readmissions Reduction Program, 2024.</strong> Hospitals track and reduce referrals to high-readmission SNF partners. Referral recovery modeled at $440/day blended rate, ramped 1→2→3 beds over 3 years at 50% recovery.</span></li>
+    <li><span class="cn">9</span><span><strong>CMS 2026 Part B RPM Reimbursement Rates.</strong> Tenovi/Prevounce/Advanta Biometrics, 2026. 99453: ~$22; 99454: ~$47 (16+ days); 99445 NEW: ~$47 (2–15 days); 99457: ~$52; 99470 NEW: ~$26; 99458: ~$41. CCM: 99490 ~$62, 99439 ~$47. MNT: 97803 ~$40 through Dec 2027. Annual attrition: ~22%/year. RPM and CCM time tracked separately.</span></li>
+    <li><span class="cn">10</span><span><strong>SyncVitals Platform Feature Reference, June 2026.</strong> Full-stack RPM managed service including: nursing staff supplied under CMS incident-to billing rules; 700+ device integrations (Dexcom, Apple Watch, Fitbit, SyncVitals private-label cellular); FHIR R4 EHR integration (Epic, eClinicalWorks, Oracle Health/Cerner, Athenahealth); all 2026 RPM + CCM + MNT CPT codes; $85/pt/month in-facility Enterprise tier · $100/pt/month post-discharge (nursing included); HIPAA BAA; AES-256/TLS 1.3/FIPS 140-2 Level 2. FDA-cleared devices required for Part B 99454; consumer/non-FDA devices appropriate for Part A in-facility bundled monitoring.</span></li>
+    <li><span class="cn">11</span><span><strong>BMJ Open Systematic Review, 2022.</strong> 49% of reviewed studies showed statistically significant hospital admission reductions with RPM across CHF, COPD, and post-surgical populations — precisely the programs Clove Lakes has built as specialties.</span></li>
+  </ul>
+  <div class="disc">All projections are estimates from published CMS data, peer-reviewed research, and national benchmarks applied to facility-level data from clovelakes.com, Medicare.gov, and CMS aggregators. Actual outcomes depend on implementation quality, enrollment rates, payer terms, provider supervision, and compliance. Part B incident-to billing requires documented general physician supervision. CCM and RPM time tracked separately. MNT requires RD/RDN. SyncVitals is a managed RPM service; clinical decisions remain with the treating physician. Not a guarantee of financial results.</div>
+
+</div><!-- /body -->
+
+<!-- ══ FOOTER ══ -->
+
+
+</div>
+
+<div class="footer"><div class="footer-left"><img class="footer-logo" src="data:image/jpeg;base64,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" alt="SyncVitals"><div class="footer-text">SyncVitals Remote Patient Monitoring<br>Prepared for Clove Lakes · July 2026</div></div><div class="footer-right">Confidential · For internal review only<br>2026 CMS rates · All estimates cited to CMS &amp; peer-reviewed sources</div></div>
+</div>
+<script>
+var IDS=["platform","governance","in-facility","ehr","financial","calculator","outpatient","next-steps"];
+var BN="display:flex;align-items:center;gap:6px;padding:12px 16px;font-size:11px;font-weight:600;border:none;border-bottom:3px solid;margin-bottom:-2px;background:none;cursor:pointer;white-space:nowrap;font-family:inherit;flex-shrink:0";
+var ON=";color:#028090;border-bottom-color:#028090";
+var OFF=";color:#5A6880;border-bottom-color:transparent";
+function go(id){
+  IDS.forEach(function(t){
+    document.getElementById("p-"+t).style.display="none";
+    document.getElementById("b-"+t).setAttribute("style",BN+OFF);
+  });
+  document.getElementById("p-"+id).style.display="block";
+  document.getElementById("b-"+id).setAttribute("style",BN+ON);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+</script>
+</body>
+</html>
