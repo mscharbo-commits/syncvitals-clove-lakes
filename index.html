@@ -16,7 +16,7 @@
   --purple:#4A40A0;  --purple-lt:#EEEDFB;
   --slate:#3A4A5C;
   --border:#DDE4EE;  --border-lt:#EEF2F8;
-  --text:#1A2638;    --gray:#5A6880;     --gray-lt:#8898AA;
+  --text:#0F1923;    --gray:#364860;     --gray-lt:#5A6880;
   --white:#FFFFFF;   --off:#F5F8FC;      --warm:#FAFBFD;
   --mono:'SF Mono','Fira Mono',Consolas,monospace;
   --serif:Georgia,'Times New Roman',serif;
@@ -300,7 +300,7 @@ td, th { overflow: hidden; text-overflow: ellipsis; }
   <button id="b-in-facility" onclick="go('in-facility')" style="display:flex;align-items:center;gap:6px;padding:12px 16px;font-size:11px;font-weight:600;border:none;border-bottom:3px solid;margin-bottom:-2px;background:none;cursor:pointer;white-space:nowrap;font-family:inherit;flex-shrink:0;color:#5A6880;border-bottom-color:transparent"><span style="font-size:13px">🏥</span> In-Facility</button>
   <button id="b-ehr" onclick="go('ehr')" style="display:flex;align-items:center;gap:6px;padding:12px 16px;font-size:11px;font-weight:600;border:none;border-bottom:3px solid;margin-bottom:-2px;background:none;cursor:pointer;white-space:nowrap;font-family:inherit;flex-shrink:0;color:#5A6880;border-bottom-color:transparent"><span style="font-size:13px">🔗</span> EHR &amp; Billing</button>
   <button id="b-financial" onclick="go('financial')" style="display:flex;align-items:center;gap:6px;padding:12px 16px;font-size:11px;font-weight:600;border:none;border-bottom:3px solid;margin-bottom:-2px;background:none;cursor:pointer;white-space:nowrap;font-family:inherit;flex-shrink:0;color:#5A6880;border-bottom-color:transparent"><span style="font-size:13px">📊</span> Financial Model</button>
-  <button id="b-calculator" onclick="go('calculator')" style="display:flex;align-items:center;gap:6px;padding:12px 16px;font-size:11px;font-weight:600;border:none;border-bottom:3px solid;margin-bottom:-2px;background:none;cursor:pointer;white-space:nowrap;font-family:inherit;flex-shrink:0;color:#1A7A4A;border-bottom-color:#1A7A4A"><span style="font-size:13px">🧮</span> Your Numbers</button>
+  <button id="b-calculator" onclick="go('calculator')" style="display:flex;align-items:center;gap:6px;padding:12px 16px;font-size:11px;font-weight:600;border:none;border-bottom:3px solid;margin-bottom:-2px;background:none;cursor:pointer;white-space:nowrap;font-family:inherit;flex-shrink:0;color:#5A6880;border-bottom-color:transparent"><span style="font-size:13px">🧮</span> Your Numbers</button>
   <button id="b-outpatient" onclick="go('outpatient')" style="display:flex;align-items:center;gap:6px;padding:12px 16px;font-size:11px;font-weight:600;border:none;border-bottom:3px solid;margin-bottom:-2px;background:none;cursor:pointer;white-space:nowrap;font-family:inherit;flex-shrink:0;color:#5A6880;border-bottom-color:transparent"><span style="font-size:13px">🏃</span> Outpatient</button>
   <button id="b-next-steps" onclick="go('next-steps')" style="display:flex;align-items:center;gap:6px;padding:12px 16px;font-size:11px;font-weight:600;border:none;border-bottom:3px solid;margin-bottom:-2px;background:none;cursor:pointer;white-space:nowrap;font-family:inherit;flex-shrink:0;color:#5A6880;border-bottom-color:transparent"><span style="font-size:13px">✅</span> Next Steps</button>
 </div>
@@ -1498,7 +1498,10 @@ function go(id){
     document.getElementById("b-"+t).setAttribute("style",BN+OFF);
   });
   document.getElementById("p-"+id).style.display="block";
-  document.getElementById("b-"+id).setAttribute("style",BN+ON);
+  var activeOn = id==="calculator"
+    ? ";color:#1A7A4A;border-bottom-color:#1A7A4A"
+    : ON;
+  document.getElementById("b-"+id).setAttribute("style",BN+activeOn);
   window.scrollTo({top:0,behavior:"smooth"});
 }
 </script>
