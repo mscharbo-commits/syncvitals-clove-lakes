@@ -274,7 +274,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,san
 
 .page{overflow-x:hidden}
 [id^="p-"]{overflow-x:hidden;box-sizing:border-box;max-width:100%}
-table{width:100%!important;max-width:100%!important;table-layout:fixed}
+table{width:100%!important;max-width:100%!important;table-layout:fixed}.gt{table-layout:auto!important}
 .role-grid,.billing-grid,.ehr-grid,.totals-grid,.steps-grid,.clin-grid{max-width:100%;width:100%}
 
 /* Full-width layout */
@@ -771,13 +771,13 @@ p,li,.res-row .rl,.calc-label,.calc-unit,.step-body,.sv-item-text{font-weight:45
   <div class="phase-block">
     <div class="ph-hdr ph-teal">Phase A — During Medicare Part A Stay (Bundled · Operational Savings Only)<span class="ph-tag">Cannot bill CMS separately · Cost avoidance</span></div>
     <div class="ph-body">
-      <div class="p-row"><div class="pl">Lost Part A billing avoided<span class="pb">214 readmissions prevented × $2,900 (PDPM $580/day × 5 hospital days)¹</span></div><div class="pv pos">$620,080</div></div>
-      <div class="p-row"><div class="pl">Staff labor savings — 49 min/day freed from manual vital checks<span class="pb">283 MC pts × 40 min/day × $25/hr NY loaded × 365⁷</span></div><div class="pv pos">$1,730,191</div></div>
-      <div class="p-row"><div class="pl">VBP penalty recovery<span class="pb">$59.9M Medicare revenue × 0.9% multiplier improvement (0.980→0.989)⁴</span></div><div class="pv pos">$539,200</div></div>
-      <div class="p-row"><div class="pl">Referral census recovery — Year 1<span class="pb">3 beds × $440/day blended × 365 × 50% recovery · ramped Yr2/Yr3⁸</span></div><div class="pv pos">$238,710</div></div>
-      <div class="p-row p-sub"><div class="pl">Total Part A savings</div><div class="pv pos">$3,128,181 / yr</div></div>
-      <div class="p-row"><div class="pl">SyncVitals Enterprise fee — in-facility<span class="pb">283 Medicare residents × $85/mo × 12 (in-facility rate)</span></div><div class="pv neg">$(288,660)</div></div>
-      <div class="p-row p-hi"><div class="pl">Net Part A benefit to Clove Lakes</div><div class="pv">$2,839,521 / yr</div></div>
+      <div class="p-row"><div class="pl">Lost Part A billing avoided<span class="pb">214 readmissions prevented × $2,900 (PDPM $580/day × 5 hospital days)¹</span></div><div class="pv pos" id="f_lost_bill">$620,080</div></div>
+      <div class="p-row"><div class="pl">Staff labor savings — 49 min/day freed from manual vital checks<span class="pb">283 MC pts × 40 min/day × $25/hr NY loaded × 365⁷</span></div><div class="pv pos" id="f_staff_save">$1,730,191</div></div>
+      <div class="p-row"><div class="pl">VBP penalty recovery<span class="pb">$59.9M Medicare revenue × 0.9% multiplier improvement (0.980→0.989)⁴</span></div><div class="pv pos" id="f_vbp">$539,200</div></div>
+      <div class="p-row"><div class="pl">Referral census recovery — Year 1<span class="pb">3 beds × $440/day blended × 365 × 50% recovery · ramped Yr2/Yr3⁸</span></div><div class="pv pos" id="f_referral">$238,710</div></div>
+      <div class="p-row p-sub"><div class="pl">Total Part A savings</div><div class="pv pos"><span id="f_pa_gross">$3,128,181</span> / yr</div></div>
+      <div class="p-row"><div class="pl">SyncVitals Enterprise fee — in-facility<span class="pb">283 Medicare residents × $85/mo × 12 (in-facility rate)</span></div><div class="pv neg" id="f_sv_pa_cost">$(288,660)</div></div>
+      <div class="p-row p-hi"><div class="pl">Net Part A benefit to Clove Lakes</div><div class="pv"><span id="f_pa_net">$2,839,521</span> / yr</div></div>
     </div>
   </div>
 
@@ -933,28 +933,28 @@ p,li,.res-row .rl,.calc-label,.calc-unit,.step-body,.sv-item-text{font-weight:45
   </div>
 
   <table class="gt">
-    <thead><tr><th>Period</th><th>New Enrollments</th><th>Active Census</th><th>Monthly Revenue (End)</th><th>Annual Gross</th><th>Net to Clove Lakes</th></tr></thead>
+    <thead><tr><th>Period</th><th>New Enrollments</th><th>Active Census</th><th>Monthly Revenue (End)</th><th>Annual Gross</th><th>SyncVitals Fee</th><th>Net to Clove Lakes</th></tr></thead>
     <tbody>
-      <tr><td><strong>Year 1</strong> — ramp + 200 Day 1 existing patients</td><td>~125/mo new · +200 Day 1</td><td>200 Day 1 → 1,520 by Dec</td><td>~$366K/mo by Dec</td><td><span class="rev">$1,780,000</span></td><td><span class="net">$652,937</span></td></tr>
-      <tr><td><strong>Year 2</strong></td><td>~125/mo ongoing</td><td>1,520 → 2,578</td><td>~$619K/mo by Dec</td><td><span class="rev">$3,961,370</span></td><td><span class="net">$1,426,972</span></td></tr>
-      <tr><td><strong>Year 3</strong></td><td>~125/mo ongoing</td><td>2,578 → 3,424</td><td>~$821K/mo by Dec</td><td><span class="rev">$5,708,390</span></td><td><span class="net">$2,046,882</span></td></tr>
-      <tr class="tr-tot"><td colspan="4"><strong>3-Year cumulative Part B gross</strong></td><td><strong>$11,449,760</strong></td><td><span style="font-size:10px">$4,126,791 (floor $140) — $8,660,803 (ceiling $181)</span></td></tr>
-      <tr class="tr-ss"><td colspan="3"><strong>Steady state (~Year 5 · 6,830 patients active)</strong></td><td><strong>~$1.0M–$1.4M/month</strong></td><td><strong>~$13.1M–$16.8M/yr</strong></td><td><strong>~$3.3M–$6.7M/yr net</strong></td></tr>
+      <tr><td><strong>Year 1</strong> — ramp + 200 Day 1 existing patients</td><td>~<span id="f_enroll_mo">99</span>/mo new · +200 Day 1</td><td>200 Day 1 → <span id="f_y1_census_end">1,520</span> by Dec</td><td>~<span id="f_y1_mo_end">$366K</span>/mo by Dec</td><td><span class="rev" id="f_y1_pb_gross">$1,780,000</span></td><td><span style="color:var(--red)" id="f_y1_sv_cost">($1,125,603)</span></td><td><span class="net" id="f_y1_pb_net">$652,937</span></td></tr>
+      <tr><td><strong>Year 2</strong></td><td>~<span id="f_enroll_mo2">99</span>/mo ongoing</td><td><span id="f_y2_census_start">1,520</span> → <span id="f_y2_census_end">2,578</span></td><td>~<span id="f_y2_mo_end">$619K</span>/mo by Dec</td><td><span class="rev" id="f_y2_pb_gross">$3,961,370</span></td><td><span style="color:var(--red)" id="f_y2_sv_cost">($2,530,622)</span></td><td><span class="net" id="f_y2_pb_net">$1,426,972</span></td></tr>
+      <tr><td><strong>Year 3</strong></td><td>~<span id="f_enroll_mo3">99</span>/mo ongoing</td><td><span id="f_y3_census_start">2,578</span> → <span id="f_y3_census_end">3,424</span></td><td>~<span id="f_y3_mo_end">$821K</span>/mo by Dec</td><td><span class="rev" id="f_y3_pb_gross">$5,708,390</span></td><td><span style="color:var(--red)" id="f_y3_sv_cost">($3,181,230)</span></td><td><span class="net" id="f_y3_pb_net">$2,046,882</span></td></tr>
+      <tr class="tr-tot"><td colspan="5"><strong>3-Year cumulative Part B gross</strong></td><td><strong id="f_3yr_gross">$11,449,760</strong></td><td><span style="font-size:10px">$4,126,791 (floor $140) — $8,660,803 (ceiling $181)</span></td></tr>
+      <tr class="tr-ss"><td colspan="4"><strong>Steady state (~Year 5 · <span id="f_ss_census_text">5,418</span> patients active)</strong></td><td><strong>~$1.0M–$1.4M/month</strong></td><td><strong>~$13.1M–$16.8M/yr</strong></td><td><strong>~$3.3M–$6.7M/yr net</strong></td></tr>
     </tbody>
   </table>
 
   <div class="totals-grid">
-    <div class="tc tc-green"><div class="tc-lbl">Year 1 Net to Clove Lakes</div><div class="tc-val">$3.49M</div><div class="tc-sub">Part A $2.84M + Part B net $0.65M (at $140 floor)</div></div>
-    <div class="tc tc-teal"><div class="tc-lbl">Year 3 Net</div><div class="tc-val">$4.89M</div><div class="tc-sub">Part B growing · upside as management time scales</div></div>
-    <div class="tc tc-amber"><div class="tc-lbl">Payback Period</div><div class="tc-val">2.2 mo</div><div class="tc-sub">Including all SyncVitals fees</div></div>
-    <div class="tc tc-navy"><div class="tc-lbl">3-Year Cumulative Net</div><div class="tc-val">$12.6M</div><div class="tc-sub">Floor estimate · escalation & additional codes add upside</div></div>
+    <div class="tc tc-green"><div class="tc-lbl">Year 1 Net to Clove Lakes</div><div class="tc-val" id="f_hero_y1">$3.49M</div><div class="tc-sub">Part A <span id="f_sub_pa">$2.84M</span> + Part B net <span id="f_sub_pb_y1">$0.65M</span></div></div>
+    <div class="tc tc-teal"><div class="tc-lbl">Year 3 Net</div><div class="tc-val" id="f_hero_y3">$4.89M</div><div class="tc-sub">Part B growing · upside as management time scales</div></div>
+    <div class="tc tc-amber"><div class="tc-lbl">Payback Period</div><div class="tc-val" id="f_hero_payback">2.2 mo</div><div class="tc-sub">Including all SyncVitals fees</div></div>
+    <div class="tc tc-navy"><div class="tc-lbl">3-Year Cumulative Net</div><div class="tc-val" id="f_hero_3yr">$12.6M</div><div class="tc-sub">Floor estimate · escalation & additional codes add upside</div></div>
   </div>
 
   <div class="phase-block">
     <div class="ph-hdr ph-navy">3-Year P&amp;L — Net to Clove Lakes After All SyncVitals Costs<span class="ph-tag">Steady state ~$3.3M–$6.7M/yr net RPM · escalation codes additional</span></div>
     <div class="ph-body">
-      <div class="p-row"><div class="pl">Part A operational savings (stable years 1–3)</div><div class="pv pos">$3,128,181 / yr</div></div>
-      <div class="p-row"><div class="pl">Part A SyncVitals fee (Enterprise $85 × 283 pts)</div><div class="pv neg">$(288,660) / yr</div></div>
+      <div class="p-row"><div class="pl">Part A operational savings (stable years 1–3)</div><div class="pv pos"><span id="f_pa_gross2">$3,128,181</span> / yr</div></div>
+      <div class="p-row"><div class="pl">Part A SyncVitals fee (Enterprise $85 × 283 pts)</div><div class="pv neg"><span id="f_sv_pa_cost">$(288,660)</span> / yr</div></div>
       <div class="p-row p-sub"><div class="pl">Part A net (stable)</div><div class="pv pos">$2,839,521 / yr</div></div>
       <div class="p-row"><div class="pl">Part B gross revenue — RPM + CCM + MNT (growing census)</div><div class="pv pos">$1.78M &nbsp;/&nbsp; $3.96M &nbsp;/&nbsp; $5.71M</div></div>
       <div class="p-row"><div class="pl">Part B SyncVitals fee ($100/pt/month — nursing included)</div><div class="pv neg">$(1.13M) &nbsp;/&nbsp; $(2.53M) &nbsp;/&nbsp; $(3.66M)</div></div>
@@ -1237,8 +1237,13 @@ p,li,.res-row .rl,.calc-label,.calc-unit,.step-body,.sv-item-text{font-weight:45
       <div class="res-row"><span class="rl">Net per patient/month (after SV fee)</span><span class="rv pos" id="r_net_pt">—</span></div>
       <div class="res-row"><span class="rl">Year 1 — active census by Dec</span><span class="rv" id="r_y1_census">—</span></div>
       <div class="res-row"><span class="rl">Year 1 Part B gross</span><span class="rv pos" id="r_y1_pb_gross">—</span></div>
+      <div class="res-row"><span class="rl">SyncVitals fee Year 1</span><span class="rv neg" id="r_y1_sv_cost">—</span></div>
       <div class="res-row"><span class="rl">Year 1 Part B net</span><span class="rv pos" id="r_y1_pb_net">—</span></div>
+      <div class="res-row"><span class="rl">Year 2 Part B gross</span><span class="rv pos" id="r_y2_pb_gross">—</span></div>
+      <div class="res-row"><span class="rl">SyncVitals fee Year 2</span><span class="rv neg" id="r_y2_sv_cost">—</span></div>
       <div class="res-row"><span class="rl">Year 2 Part B net</span><span class="rv pos" id="r_y2_pb_net">—</span></div>
+      <div class="res-row"><span class="rl">Year 3 Part B gross</span><span class="rv pos" id="r_y3_pb_gross">—</span></div>
+      <div class="res-row"><span class="rl">SyncVitals fee Year 3</span><span class="rv neg" id="r_y3_sv_cost">—</span></div>
       <div class="res-row sub"><span class="rl">Year 3 Part B net</span><span class="rv pos" id="r_y3_pb_net">—</span></div>
     </div>
 
@@ -1281,6 +1286,9 @@ function fmt(n, prefix){
 function fmtK(n){ return '$'+(n/1000).toFixed(0)+'K'; }
 function pct(n){ return n.toFixed(1)+'%'; }
 function num(n){ return Math.round(n).toLocaleString(); }
+
+function fmtM(n){ return '$'+(n/1e6).toFixed(2)+'M'; }
+function fmtK2(n){ return '$'+(n/1000).toFixed(0)+'K'; }
 
 function calc(){
   // ── INPUTS ──
@@ -1403,8 +1411,13 @@ function calc(){
   s('net_pt',       '$'+net_pt.toFixed(0)+'/pt/mo  ('+fmt(rpm_rev)+' gross − $'+sv_pb+' SV)');
   s('y1_census',    num(Math.round(a1))+' patients');
   s('y1_pb_gross',  fmt(b1));
+  s('y1_sv_cost',   '('+fmt(b1-c1)+')');
   s('y1_pb_net',    fmt(c1));
+  s('y2_pb_gross',  fmt(b2));
+  s('y2_sv_cost',   '('+fmt(b2-c2)+')');
   s('y2_pb_net',    fmt(c2));
+  s('y3_pb_gross',  fmt(b3));
+  s('y3_sv_cost',   '('+fmt(b3-c3)+')');
   s('y3_pb_net',    fmt(c3));
 
   // Combined
@@ -1418,6 +1431,102 @@ function calc(){
 
   // Chart
   drawChart(pa_net, c1, pa_net, c2, pa_net, c3, pa_net, ss_net_yr, cumul);
+
+  // ── UPDATE FINANCIAL MODEL TAB ──
+  // Part A
+  var f_pa_g = document.getElementById('f_pa_gross');
+  var f_pa_g2 = document.getElementById('f_pa_gross2');
+  var f_sv_pa = document.getElementById('f_sv_pa_cost');
+  var f_pa_n = document.getElementById('f_pa_net');
+  if(f_pa_g)  f_pa_g.textContent  = fmt(pa_gross);
+  if(f_pa_g2) f_pa_g2.textContent = fmt(pa_gross);
+  if(f_sv_pa) f_sv_pa.textContent = '('+fmt(pa_sv_cost)+')';
+  if(f_pa_n)  f_pa_n.textContent  = fmt(pa_net);
+
+  // Part B table rows
+  var ydata = [
+    {gross:b1, net:c1, gi:'f_y1_pb_gross', ni:'f_y1_pb_net'},
+    {gross:b2, net:c2, gi:'f_y2_pb_gross', ni:'f_y2_pb_net'},
+    {gross:b3, net:c3, gi:'f_y3_pb_gross', ni:'f_y3_pb_net'},
+  ];
+  ydata.forEach(function(y){
+    var gel = document.getElementById(y.gi);
+    var nel = document.getElementById(y.ni);
+    if(gel) gel.textContent = fmt(y.gross);
+    if(nel) nel.textContent = fmt(y.net);
+  });
+
+  // Steady state census text
+  var fss = document.getElementById('f_ss_census_text');
+  if(fss) fss.textContent = Math.round(ss_census).toLocaleString();
+
+  // Hero totals grid
+  var fh1 = document.getElementById('f_hero_y1');
+  var fh3 = document.getElementById('f_hero_y3');
+  var fhp = document.getElementById('f_hero_payback');
+  var fh3yr = document.getElementById('f_hero_3yr');
+  var fspa = document.getElementById('f_sub_pa');
+  var fspb = document.getElementById('f_sub_pb_y1');
+  if(fh1)  fh1.textContent  = fmt(tot_y1);
+  if(fh3)  fh3.textContent  = fmt(tot_y3);
+  if(fhp)  fhp.textContent  = payback.toFixed(1)+' mo';
+  if(fh3yr) fh3yr.textContent = fmt(cumul);
+  if(fspa) fspa.textContent = fmt(pa_net);
+  if(fspb) fspb.textContent = fmt(c1);
+
+  // Part A line items
+  var ids_pa = {
+    f_lost_bill: lost_bill, f_staff_save: staff_save,
+    f_vbp: vbp_rec, f_referral: referral,
+    f_sv_pa_cost: -pa_sv_cost
+  };
+  Object.keys(ids_pa).forEach(function(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    var v = ids_pa[id];
+    el.textContent = v < 0 ? '('+fmt(Math.abs(v))+')' : fmt(v);
+  });
+
+  // 3-year Part B cumulative
+  var f3g = document.getElementById('f_3yr_gross');
+  if(f3g) f3g.textContent = fmt(b1+b2+b3);
+
+  // Census and monthly end values
+  var fy1ce = document.getElementById('f_y1_census_end');
+  var fy1me = document.getElementById('f_y1_mo_end');
+  var fy2cs = document.getElementById('f_y2_census_start');
+  var fy2ce = document.getElementById('f_y2_census_end');
+  var fy2me = document.getElementById('f_y2_mo_end');
+  var fy3cs = document.getElementById('f_y3_census_start');
+  var fy3ce = document.getElementById('f_y3_census_end');
+  var fy3me = document.getElementById('f_y3_mo_end');
+
+  if(fy1ce) fy1ce.textContent = Math.round(a1).toLocaleString();
+  if(fy1me) fy1me.textContent = '$'+Math.round(rev_mo_arr[11].gross/1000)+'K';
+  if(fy2cs) fy2cs.textContent = Math.round(a1).toLocaleString();
+  if(fy2ce) fy2ce.textContent = Math.round(a2).toLocaleString();
+  if(fy2me) fy2me.textContent = '$'+Math.round(rev_mo_arr[23].gross/1000)+'K';
+  if(fy3cs) fy3cs.textContent = Math.round(a2).toLocaleString();
+  if(fy3ce) fy3ce.textContent = Math.round(a3).toLocaleString();
+  if(fy3me) fy3me.textContent = '$'+Math.round(rev_mo_arr[35].gross/1000)+'K';
+
+  // Enrollment rate text
+  ['f_enroll_mo','f_enroll_mo2','f_enroll_mo3'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.textContent = Math.round(new_per_mo);
+  });
+
+  // SyncVitals Part B fee column
+  var sv_costs = [
+    {id:'f_y1_sv_cost', val: rev_mo_arr.slice(0,12).reduce(function(s,r){return s+r.gross-r.net;},0)},
+    {id:'f_y2_sv_cost', val: rev_mo_arr.slice(12,24).reduce(function(s,r){return s+r.gross-r.net;},0)},
+    {id:'f_y3_sv_cost', val: rev_mo_arr.slice(24,36).reduce(function(s,r){return s+r.gross-r.net;},0)},
+  ];
+  sv_costs.forEach(function(x){
+    var el = document.getElementById(x.id);
+    if(el) el.textContent = '('+fmt(x.val)+')';
+  });
+
 }
 
 function drawChart(pa1,pb1, pa2,pb2, pa3,pb3, pa_ss,pb_ss, cumul){
