@@ -458,60 +458,60 @@ p,li,.res-row .rl,.calc-label,.calc-unit,.step-body,.sv-item-text{font-weight:45
 
 
   <!-- AI Prediction expanded block -->
-  <div style="background:var(--navy);border-radius:10px;padding:18px 22px;margin-top:20px">
-    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.5);margin-bottom:14px">AI Prediction Pipeline — How It Works</div>
+  <div style="margin-top:20px">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gray-lt,#5A6880);margin-bottom:14px">AI Prediction Pipeline — How It Works</div>
 
     <!-- 5-stage pipeline -->
     <div style="display:flex;align-items:center;gap:0;margin-bottom:18px">
-      <div style="flex:1;background:rgba(255,255,255,.06);border-radius:6px;padding:10px 10px;text-align:center">
-        <div style="font-size:9px;font-weight:700;color:#7FDBA8;letter-spacing:.08em;margin-bottom:4px">DATA INGEST</div>
-        <div style="font-size:8px;color:rgba(255,255,255,.6);line-height:1.4">Vitals captured from FDA-cleared devices. Every reading timestamped and validated against device calibration.</div>
+      <div style="flex:1;background:#EAF7F0;border-radius:6px;padding:10px 10px;text-align:center">
+        <div style="font-size:9px;font-weight:700;color:#1A7A4A;letter-spacing:.08em;margin-bottom:4px">DATA INGEST</div>
+        <div style="font-size:8px;color:#364860;line-height:1.4">Vitals captured from FDA-cleared devices. Every reading timestamped and validated against device calibration.</div>
       </div>
-      <div style="font-size:14px;color:rgba(255,255,255,.2);padding:0 6px">›</div>
-      <div style="flex:1;background:rgba(255,255,255,.06);border-radius:6px;padding:10px 10px;text-align:center">
-        <div style="font-size:9px;font-weight:700;color:#7FD8E8;letter-spacing:.08em;margin-bottom:4px">ANOMALY DETECT</div>
-        <div style="font-size:8px;color:rgba(255,255,255,.6);line-height:1.4">AI compares each reading to the patient's own baseline trend — not population averages. Flags rate of change, not just threshold breaches.</div>
+      <div style="font-size:14px;color:#DDE4EE;padding:0 6px">›</div>
+      <div style="flex:1;background:#EBF6F8;border-radius:6px;padding:10px 10px;text-align:center">
+        <div style="font-size:9px;font-weight:700;color:#028090;letter-spacing:.08em;margin-bottom:4px">ANOMALY DETECT</div>
+        <div style="font-size:8px;color:#364860;line-height:1.4">AI compares each reading to the patient's own baseline trend — not population averages. Flags rate of change, not just threshold breaches.</div>
       </div>
-      <div style="font-size:14px;color:rgba(255,255,255,.2);padding:0 6px">›</div>
-      <div style="flex:1;background:rgba(255,255,255,.06);border-radius:6px;padding:10px 10px;text-align:center">
-        <div style="font-size:9px;font-weight:700;color:#FAC88A;letter-spacing:.08em;margin-bottom:4px">RISK SCORING</div>
-        <div style="font-size:8px;color:rgba(255,255,255,.6);line-height:1.4">Composite 0–100 risk score per patient. Multi-signal model weighing vitals, anomaly severity, condition history, and medication adherence.</div>
+      <div style="font-size:14px;color:#DDE4EE;padding:0 6px">›</div>
+      <div style="flex:1;background:#FDF6EC;border-radius:6px;padding:10px 10px;text-align:center">
+        <div style="font-size:9px;font-weight:700;color:#D4892A;letter-spacing:.08em;margin-bottom:4px">RISK SCORING</div>
+        <div style="font-size:8px;color:#364860;line-height:1.4">Composite 0–100 risk score per patient. Multi-signal model weighing vitals, anomaly severity, condition history, and medication adherence.</div>
       </div>
-      <div style="font-size:14px;color:rgba(255,255,255,.2);padding:0 6px">›</div>
-      <div style="flex:1;background:rgba(255,255,255,.06);border-radius:6px;padding:10px 10px;text-align:center">
-        <div style="font-size:9px;font-weight:700;color:#AA99FF;letter-spacing:.08em;margin-bottom:4px">AI PREDICTION</div>
-        <div style="font-size:8px;color:rgba(255,255,255,.6);line-height:1.4">48-hr ER visit probability · 30-day hospital admission probability · 24-hr deterioration probability · Identifies which patients need immediate vs. routine intervention.</div>
+      <div style="font-size:14px;color:#DDE4EE;padding:0 6px">›</div>
+      <div style="flex:1;background:#EEEDFB;border-radius:6px;padding:10px 10px;text-align:center">
+        <div style="font-size:9px;font-weight:700;color:#5B4FBE;letter-spacing:.08em;margin-bottom:4px">AI PREDICTION</div>
+        <div style="font-size:8px;color:#364860;line-height:1.4">48-hr ER visit probability · 30-day hospital admission probability · 24-hr deterioration probability · Identifies which patients need immediate vs. routine intervention.</div>
       </div>
-      <div style="font-size:14px;color:rgba(255,255,255,.2);padding:0 6px">›</div>
-      <div style="flex:1;background:rgba(255,255,255,.06);border-radius:6px;padding:10px 10px;text-align:center">
-        <div style="font-size:9px;font-weight:700;color:#FF8A8A;letter-spacing:.08em;margin-bottom:4px">ALERT ENGINE</div>
-        <div style="font-size:8px;color:rgba(255,255,255,.6);line-height:1.4">Fires to the SyncVitals nurse command dashboard. Routes by severity: routine monitoring vs. urgent escalation vs. immediate physician contact.</div>
+      <div style="font-size:14px;color:#DDE4EE;padding:0 6px">›</div>
+      <div style="flex:1;background:#FDECEA;border-radius:6px;padding:10px 10px;text-align:center">
+        <div style="font-size:9px;font-weight:700;color:#C0392B;letter-spacing:.08em;margin-bottom:4px">ALERT ENGINE</div>
+        <div style="font-size:8px;color:#364860;line-height:1.4">Fires to the SyncVitals nurse command dashboard. Routes by severity: routine monitoring vs. urgent escalation vs. immediate physician contact.</div>
       </div>
     </div>
 
     <!-- 4 prediction outputs -->
-    <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);margin-bottom:10px">What the AI Predicts Per Patient — Continuously Updated</div>
+    <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#5A6880;margin-bottom:10px">What the AI Predicts Per Patient — Continuously Updated</div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:14px">
-      <div style="background:rgba(255,255,255,.05);border-radius:6px;padding:10px 12px;border-left:3px solid #FF6B6B">
-        <div style="font-size:10px;font-weight:700;color:#FF8A8A;margin-bottom:3px">ER Risk 48H</div>
-        <div style="font-size:8px;color:rgba(255,255,255,.6);line-height:1.45">Probability of ER visit within 48 hours. Triggers immediate nurse review when elevated. The single most actionable readmission prevention signal.</div>
+      <div style="background:#FDECEA;border-radius:6px;padding:10px 12px;border-left:3px solid #C0392B">
+        <div style="font-size:10px;font-weight:700;color:#C0392B;margin-bottom:3px">ER Risk 48H</div>
+        <div style="font-size:8px;color:#364860;line-height:1.45">Probability of ER visit within 48 hours. Triggers immediate nurse review when elevated. The single most actionable readmission prevention signal.</div>
       </div>
-      <div style="background:rgba(255,255,255,.05);border-radius:6px;padding:10px 12px;border-left:3px solid #FAC88A">
-        <div style="font-size:10px;font-weight:700;color:#FAC88A;margin-bottom:3px">Hospital 30D</div>
-        <div style="font-size:8px;color:rgba(255,255,255,.6);line-height:1.45">30-day hospital admission probability. Drives care plan phase gate decisions and determines monitoring frequency for each patient.</div>
+      <div style="background:#FDF6EC;border-radius:6px;padding:10px 12px;border-left:3px solid #D4892A">
+        <div style="font-size:10px;font-weight:700;color:#D4892A;margin-bottom:3px">Hospital 30D</div>
+        <div style="font-size:8px;color:#364860;line-height:1.45">30-day hospital admission probability. Drives care plan phase gate decisions and determines monitoring frequency for each patient.</div>
       </div>
-      <div style="background:rgba(255,255,255,.05);border-radius:6px;padding:10px 12px;border-left:3px solid #7FD8E8">
-        <div style="font-size:10px;font-weight:700;color:#7FD8E8;margin-bottom:3px">Deterioration 24H</div>
-        <div style="font-size:8px;color:rgba(255,255,255,.6);line-height:1.45">Clinical deterioration probability in the next 24 hours. Catches the slow downward trend before it becomes an acute event — the 3am early warning.</div>
+      <div style="background:#EBF6F8;border-radius:6px;padding:10px 12px;border-left:3px solid #028090">
+        <div style="font-size:10px;font-weight:700;color:#028090;margin-bottom:3px">Deterioration 24H</div>
+        <div style="font-size:8px;color:#364860;line-height:1.45">Clinical deterioration probability in the next 24 hours. Catches the slow downward trend before it becomes an acute event — the 3am early warning.</div>
       </div>
-      <div style="background:rgba(255,255,255,.05);border-radius:6px;padding:10px 12px;border-left:3px solid #7FDBA8">
-        <div style="font-size:10px;font-weight:700;color:#7FDBA8;margin-bottom:3px">Intervention Level</div>
-        <div style="font-size:8px;color:rgba(255,255,255,.6);line-height:1.45">Immediate · Urgent · Routine · Monitoring. Tells the SyncVitals nurse exactly what action is required — no clinical interpretation needed to triage the dashboard.</div>
+      <div style="background:#EAF7F0;border-radius:6px;padding:10px 12px;border-left:3px solid #1A7A4A">
+        <div style="font-size:10px;font-weight:700;color:#1A7A4A;margin-bottom:3px">Intervention Level</div>
+        <div style="font-size:8px;color:#364860;line-height:1.45">Immediate · Urgent · Routine · Monitoring. Tells the SyncVitals nurse exactly what action is required — no clinical interpretation needed to triage the dashboard.</div>
       </div>
     </div>
 
     <!-- Bottom note -->
-    <div style="font-size:9.5px;color:rgba(255,255,255,.55);line-height:1.6;border-top:1px solid rgba(255,255,255,.08);padding-top:10px">
+    <div style="font-size:9.5px;color:#5A6880;line-height:1.6;border-top:1px solid #DDE4EE;padding-top:10px;margin-top:4px">
       The prediction engine runs on every vital sign reading — not once daily on a schedule. A patient whose BP spikes at 2am triggers the pipeline immediately. The nurse sees an updated risk score and intervention recommendation before the morning shift starts. This is the difference between catching a deterioration and responding to an admission.
     </div>
   </div>
