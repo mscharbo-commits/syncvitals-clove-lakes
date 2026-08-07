@@ -1335,7 +1335,11 @@ p,li,.res-row .rl,.calc-label,.calc-unit,.step-body,.sv-item-text{font-weight:45
     </div>
 
     <!-- Part A breakdown -->
-    <div class="res-block">
+    
+<!-- Auth bar -->
+<div id="sv-auth-bar" style="display:flex;align-items:center;justify-content:flex-end;gap:6px;padding:0 0 16px;border-bottom:1px solid var(--border,#DDE4EE);margin-bottom:20px"></div>
+
+<div class="res-block">
       <div class="res-block-hdr teal">Phase A — Operational Savings (in-facility)</div>
       <div class="res-row"><span class="rl">Readmissions prevented/month</span><span class="rv pos" id="r_readmit_prev">—</span></div>
       <div class="res-row"><span class="rl">Lost billing avoided (annual)</span><span class="rv pos" id="r_lost_bill">—</span></div>
@@ -1695,6 +1699,245 @@ function resetCalc(){
 
 // Run on load
 calc();
+
+// ══════════════════════════════════════════════════════
+// SYNCVITALS LEAD CAPTURE — AUTH + SAVE
+// ══════════════════════════════════════════════════════
+const SV_URL  = "https://qbaougugtogrybssgjwb.supabase.co";
+const SV_ANON = "sb_publishable_NqGenCLfo5dMzlB5iklvsQ_8nOPiOXJ";
+
+// SHA-256 hash using SubtleCrypto
+async function hashPassword(pw) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(pw));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+// Supabase REST helpers
+async function sbInsert(row) {
+  const r = await fetch(SV_URL + "/rest/v1/leads", {
+    method: "POST",
+    headers: { "apikey": SV_ANON, "Authorization": "Bearer " + SV_ANON,
+               "Content-Type": "application/json", "Prefer": "return=representation" },
+    body: JSON.stringify(row)
+  });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+
+async function sbUpdate(email, hash, data) {
+  const r = await fetch(SV_URL + "/rest/v1/leads?email=eq." + encodeURIComponent(email) + "&password_hash=eq." + hash, {
+    method: "PATCH",
+    headers: { "apikey": SV_ANON, "Authorization": "Bearer " + SV_ANON,
+               "Content-Type": "application/json", "Prefer": "return=representation" },
+    body: JSON.stringify(data)
+  });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+
+async function sbLogin(email, hash) {
+  const r = await fetch(SV_URL + "/rest/v1/leads?email=eq." + encodeURIComponent(email) + "&password_hash=eq." + hash + "&select=*", {
+    method: "GET",
+    headers: { "apikey": SV_ANON, "Authorization": "Bearer " + SV_ANON }
+  });
+  if (!r.ok) throw new Error(await r.text());
+  const rows = await r.json();
+  return rows.length ? rows[0] : null;
+}
+
+// Session state
+let svSession = null;
+try { svSession = JSON.parse(sessionStorage.getItem('sv_session') || 'null'); } catch(e) {}
+
+function svSetSession(user) {
+  svSession = user;
+  sessionStorage.setItem('sv_session', JSON.stringify(user));
+  renderAuthBar();
+}
+
+function svClearSession() {
+  svSession = null;
+  sessionStorage.removeItem('sv_session');
+  renderAuthBar();
+}
+
+// Gather current calculator inputs
+function gatherInputs() {
+  const ids = ['beds','occ','mc_pct','los','mc_rev','readmit','hosp_days','pdpm','readmit_red',
+               'vbp','home','opt','enroll','existing','attrit','rpm_rev','sv_pa','sv_pb','setup','time','wage'];
+  const d = {};
+  ids.forEach(id => {
+    const el = document.getElementById('i_' + id);
+    if (el) d[id] = parseFloat(el.value) || 0;
+  });
+  return d;
+}
+
+// Gather current results from displayed elements
+function gatherResults() {
+  const get = id => {
+    const el = document.getElementById('r_' + id);
+    return el ? parseFloat(el.textContent.replace(/[$M,%K\s]/g,'')) || 0 : 0;
+  };
+  return {
+    y1_net: get('c1'), y2_net: get('c2'), y3_net: get('c3'),
+    payback: get('payback2'), roi: parseFloat((document.getElementById('r_roi')||{}).textContent) || 0
+  };
+}
+
+// Render auth bar in calculator tab
+function renderAuthBar() {
+  const bar = document.getElementById('sv-auth-bar');
+  if (!bar) return;
+  if (svSession) {
+    bar.innerHTML = '<span style="font-size:11px;color:var(--gray-lt)">Signed in as <strong>' + svSession.email + '</strong></span>'
+      + '<button onclick="svSave()" id="sv-save-btn" style="background:var(--green);color:#fff;border:none;padding:7px 18px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;margin-left:10px">💾 Save My Numbers</button>'
+      + '<button onclick="svSignOut()" style="background:none;border:1px solid var(--border);color:var(--gray-lt);padding:7px 12px;border-radius:6px;font-size:11px;cursor:pointer;margin-left:6px">Sign Out</button>';
+  } else {
+    bar.innerHTML = '<span style="font-size:11px;color:var(--gray-lt)">Save your numbers to come back later</span>'
+      + '<button onclick="showSignIn()" style="background:none;border:1px solid var(--border);color:var(--gray);padding:7px 14px;border-radius:6px;font-size:11px;cursor:pointer;margin-left:10px">Sign In</button>'
+      + '<button onclick="showSignUp()" style="background:var(--teal);color:#fff;border:none;padding:7px 18px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;margin-left:6px">💾 Save My Numbers</button>';
+  }
+}
+
+// Save current inputs + results
+async function svSave() {
+  if (!svSession) { showSignUp(); return; }
+  const btn = document.getElementById('sv-save-btn');
+  if (btn) { btn.textContent = 'Saving…'; btn.disabled = true; }
+  try {
+    const data = { ...gatherInputs(), ...gatherResults(), last_saved: new Date().toISOString() };
+    await sbUpdate(svSession.email, svSession.password_hash, data);
+    svSession = { ...svSession, ...data };
+    svSetSession(svSession);
+    if (btn) { btn.textContent = '✓ Saved!'; setTimeout(() => { btn.textContent = '💾 Save My Numbers'; btn.disabled = false; }, 2000); }
+  } catch(e) {
+    alert('Save failed: ' + e.message);
+    if (btn) { btn.textContent = '💾 Save My Numbers'; btn.disabled = false; }
+  }
+}
+
+function svSignOut() {
+  svClearSession();
+}
+
+// ── MODAL ──
+function svModal(html_content) {
+  document.getElementById('sv-modal-backdrop').style.display = 'flex';
+  document.getElementById('sv-modal-body').innerHTML = html_content;
+}
+function svCloseModal() {
+  document.getElementById('sv-modal-backdrop').style.display = 'none';
+}
+
+function showSignUp() {
+  svModal(`
+    <h3 style="margin:0 0 4px;color:var(--navy);font-size:16px">Save Your Numbers</h3>
+    <p style="margin:0 0 18px;font-size:11px;color:var(--gray-lt)">Create a free account to save and return to your assessment anytime.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div><label style="font-size:10px;font-weight:700;color:var(--gray-lt)">FACILITY NAME *</label><br/>
+        <input id="su-facility" placeholder="Clove Lakes Health Care" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:5px;font-size:12px;margin-top:3px;box-sizing:border-box"/></div>
+      <div><label style="font-size:10px;font-weight:700;color:var(--gray-lt)">YOUR NAME *</label><br/>
+        <input id="su-name" placeholder="Jane Smith" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:5px;font-size:12px;margin-top:3px;box-sizing:border-box"/></div>
+      <div><label style="font-size:10px;font-weight:700;color:var(--gray-lt)">EMAIL *</label><br/>
+        <input id="su-email" type="email" placeholder="jane@clovelakes.com" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:5px;font-size:12px;margin-top:3px;box-sizing:border-box"/></div>
+      <div><label style="font-size:10px;font-weight:700;color:var(--gray-lt)">PASSWORD *</label><br/>
+        <input id="su-pw" type="password" placeholder="Min 8 characters" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:5px;font-size:12px;margin-top:3px;box-sizing:border-box"/></div>
+      <div><label style="font-size:10px;font-weight:700;color:var(--gray-lt)">YOUR ROLE *</label><br/>
+        <select id="su-role" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:5px;font-size:12px;margin-top:3px;box-sizing:border-box">
+          <option value="">Select role…</option>
+          <option>Administrator</option><option>CFO</option><option>DON</option>
+          <option>Owner / Operator</option><option>Consultant</option><option>Other</option>
+        </select></div>
+      <div><label style="font-size:10px;font-weight:700;color:var(--gray-lt)">PHONE <span style="font-weight:400;color:#aaa">(optional)</span></label><br/>
+        <input id="su-phone" type="tel" placeholder="(555) 000-0000" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:5px;font-size:12px;margin-top:3px;box-sizing:border-box"/></div>
+    </div>
+    <div id="su-err" style="color:#c0392b;font-size:11px;min-height:16px;margin-bottom:8px"></div>
+    <button onclick="doSignUp()" style="width:100%;background:var(--teal);color:#fff;border:none;padding:10px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer">Create Account &amp; Save Numbers</button>
+    <p style="text-align:center;font-size:11px;color:var(--gray-lt);margin:12px 0 0">Already have an account? <a href="#" onclick="showSignIn()" style="color:var(--teal)">Sign in</a></p>
+  `);
+}
+
+async function doSignUp() {
+  const facility = document.getElementById('su-facility').value.trim();
+  const name     = document.getElementById('su-name').value.trim();
+  const email    = document.getElementById('su-email').value.trim().toLowerCase();
+  const pw       = document.getElementById('su-pw').value;
+  const role     = document.getElementById('su-role').value;
+  const phone    = document.getElementById('su-phone').value.trim();
+  const err      = document.getElementById('su-err');
+  if (!facility || !name || !email || !pw || !role) { err.textContent = 'Please fill in all required fields.'; return; }
+  if (pw.length < 8) { err.textContent = 'Password must be at least 8 characters.'; return; }
+  err.textContent = '';
+  const hash = await hashPassword(pw);
+  const inputs = gatherInputs();
+  const results = gatherResults();
+  try {
+    await sbInsert({ email, password_hash: hash, name, facility, role, phone,
+                     ...inputs, ...results, last_saved: new Date().toISOString() });
+    svSetSession({ email, password_hash: hash, name, facility, role });
+    svCloseModal();
+    showToast('Account created and numbers saved! ✓');
+  } catch(e) {
+    const msg = e.message || '';
+    err.textContent = msg.includes('duplicate') || msg.includes('unique')
+      ? 'That email is already registered. Sign in instead.'
+      : 'Error: ' + msg;
+  }
+}
+
+function showSignIn() {
+  svModal(`
+    <h3 style="margin:0 0 4px;color:var(--navy);font-size:16px">Welcome Back</h3>
+    <p style="margin:0 0 18px;font-size:11px;color:var(--gray-lt)">Sign in to load your saved numbers.</p>
+    <label style="font-size:10px;font-weight:700;color:var(--gray-lt)">EMAIL</label><br/>
+    <input id="si-email" type="email" placeholder="jane@clovelakes.com" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:5px;font-size:12px;margin:4px 0 10px;box-sizing:border-box"/>
+    <label style="font-size:10px;font-weight:700;color:var(--gray-lt)">PASSWORD</label><br/>
+    <input id="si-pw" type="password" placeholder="Your password" style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:5px;font-size:12px;margin:4px 0 10px;box-sizing:border-box"
+           onkeydown="if(event.key==='Enter')doSignIn()"/>
+    <div id="si-err" style="color:#c0392b;font-size:11px;min-height:16px;margin-bottom:8px"></div>
+    <button onclick="doSignIn()" style="width:100%;background:var(--navy);color:#fff;border:none;padding:10px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer">Sign In &amp; Load My Numbers</button>
+    <p style="text-align:center;font-size:11px;color:var(--gray-lt);margin:12px 0 0">No account yet? <a href="#" onclick="showSignUp()" style="color:var(--teal)">Create one free</a></p>
+  `);
+}
+
+async function doSignIn() {
+  const email = document.getElementById('si-email').value.trim().toLowerCase();
+  const pw    = document.getElementById('si-pw').value;
+  const err   = document.getElementById('si-err');
+  if (!email || !pw) { err.textContent = 'Please enter your email and password.'; return; }
+  err.textContent = 'Signing in…';
+  const hash = await hashPassword(pw);
+  try {
+    const user = await sbLogin(email, hash);
+    if (!user) { err.textContent = 'Email or password incorrect.'; return; }
+    svSetSession({ email: user.email, password_hash: hash, name: user.name, facility: user.facility, role: user.role });
+    // Restore saved inputs
+    const inputFields = ['beds','occ','mc_pct','los','mc_rev','readmit','hosp_days','pdpm','readmit_red',
+                         'vbp','home','opt','enroll','existing','attrit','rpm_rev','sv_pa','sv_pb','setup','time','wage'];
+    inputFields.forEach(id => {
+      const el = document.getElementById('i_' + id);
+      if (el && user[id] != null && user[id] !== 0) el.value = user[id];
+    });
+    calc(); // recalculate with restored inputs
+    svCloseModal();
+    showToast('Welcome back, ' + (user.name || user.email) + '! Your numbers have been loaded. ✓');
+  } catch(e) {
+    err.textContent = 'Error: ' + e.message;
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('sv-toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.style.opacity = '1';
+  t.style.transform = 'translateY(0)';
+  setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateY(10px)'; }, 3500);
+}
+
+// Init auth bar on load
+document.addEventListener('DOMContentLoaded', () => { renderAuthBar(); });
 </script>
 
 </div><!-- /sec -->
@@ -1834,5 +2077,17 @@ function go(id){
   window.scrollTo({top:0,behavior:"smooth"});
 }
 </script>
+
+<!-- SyncVitals Auth Modal -->
+<div id="sv-modal-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;border-radius:12px;padding:28px 28px 24px;width:100%;max-width:520px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.25)">
+    <button onclick="svCloseModal()" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:#aaa;line-height:1">×</button>
+    <div id="sv-modal-body"></div>
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div id="sv-toast" style="position:fixed;bottom:24px;right:24px;background:var(--navy,#0D2B5E);color:#fff;padding:12px 20px;border-radius:8px;font-size:12px;font-weight:600;z-index:10000;opacity:0;transform:translateY(10px);transition:all .35s ease;max-width:320px;box-shadow:0 4px 20px rgba(0,0,0,.25)"></div>
+
 </body>
 </html>
