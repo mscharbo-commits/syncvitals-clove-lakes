@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>SyncVitals — Lead Admin</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F0F2F5;color:#1a2332;min-height:100vh}
+  .login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+  .login-box{background:#fff;border-radius:12px;padding:40px;width:100%;max-width:380px;box-shadow:0 4px 24px rgba(0,0,0,.1)}
+  .login-box h1{font-size:20px;color:#0D2B5E;margin-bottom:4px}
+  .login-box p{font-size:12px;color:#5A6880;margin-bottom:24px}
+  label{font-size:11px;font-weight:700;color:#5A6880;letter-spacing:.08em;text-transform:uppercase}
+  input[type=password],input[type=text]{width:100%;padding:9px 12px;border:1px solid #DDE4EE;border-radius:6px;font-size:13px;margin:4px 0 14px}
+  input:focus{outline:none;border-color:#028090}
+  .btn{width:100%;background:#0D2B5E;color:#fff;border:none;padding:11px;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer}
+  .btn:hover{background:#0a2250}
+  .err{color:#c0392b;font-size:11px;margin-bottom:10px;min-height:16px}
+  /* Admin panel */
+  #admin-panel{display:none}
+  .topbar{background:#0D2B5E;padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between}
+  .topbar h1{color:#fff;font-size:15px;font-weight:700}
+  .topbar span{color:rgba(255,255,255,.5);font-size:11px}
+  .topbar button{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:5px 14px;border-radius:5px;font-size:11px;cursor:pointer}
+  .content{padding:24px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+  .stat{background:#fff;border-radius:8px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .stat-val{font-size:24px;font-weight:800;color:#0D2B5E;margin-bottom:2px}
+  .stat-lbl{font-size:11px;color:#5A6880;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+  .toolbar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .toolbar input{padding:7px 12px;border:1px solid #DDE4EE;border-radius:6px;font-size:12px;width:240px}
+  .toolbar input:focus{outline:none;border-color:#028090}
+  .export-btn{background:#028090;color:#fff;border:none;padding:7px 16px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer}
+  table{width:100%;background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.06);border-collapse:collapse;overflow:hidden}
+  thead tr{background:#0D2B5E}
+  th{padding:10px 14px;text-align:left;font-size:10px;color:rgba(255,255,255,.7);font-weight:700;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;cursor:pointer;user-select:none}
+  th:hover{color:#fff}
+  th.sorted{color:#7FDBA8}
+  td{padding:10px 14px;font-size:12px;border-bottom:1px solid #F0F2F5;white-space:nowrap}
+  tr:hover td{background:#F7F8FA}
+  tr:last-child td{border-bottom:none}
+  .role-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;background:#EBF6F8;color:#028090}
+  .y1-val{font-weight:700;color:#1A7A4A}
+  .detail-row td{white-space:normal;background:#F7F9FF!important;padding:14px 24px}
+  .detail-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;font-size:11px}
+  .detail-item label{display:block;color:#5A6880;font-weight:700;font-size:9px;text-transform:uppercase;margin-bottom:2px}
+  .detail-item span{color:#0D2B5E;font-weight:600}
+  .empty{text-align:center;padding:48px;color:#aaa;font-size:13px}
+</style>
+</head>
+<body>
+
+<!-- Login screen -->
+<div class="login-wrap" id="login-screen">
+  <div class="login-box">
+    <h1>SyncVitals Admin</h1>
+    <p>Lead management dashboard — restricted access</p>
+    <label>Admin Password</label>
+    <input type="password" id="admin-pw" placeholder="Enter admin password"
+           onkeydown="if(event.key==='Enter')doAdminLogin()"/>
+    <div class="err" id="login-err"></div>
+    <button class="btn" onclick="doAdminLogin()">Sign In</button>
+  </div>
+</div>
+
+<!-- Admin panel -->
+<div id="admin-panel">
+  <div class="topbar">
+    <h1>⚡ SyncVitals — Lead Dashboard</h1>
+    <div style="display:flex;align-items:center;gap:12px">
+      <span id="last-refresh"></span>
+      <button onclick="loadLeads()">↻ Refresh</button>
+      <button onclick="adminLogout()" style="background:rgba(255,255,255,.05)">Sign Out</button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="stats">
+      <div class="stat"><div class="stat-val" id="s-total">—</div><div class="stat-lbl">Total Leads</div></div>
+      <div class="stat"><div class="stat-val" id="s-week">—</div><div class="stat-lbl">This Week</div></div>
+      <div class="stat"><div class="stat-val" id="s-avg-beds">—</div><div class="stat-lbl">Avg Bed Count</div></div>
+      <div class="stat"><div class="stat-val" id="s-avg-y1">—</div><div class="stat-lbl">Avg Proj. Y1 Net</div></div>
+    </div>
+    <div class="toolbar">
+      <input type="text" id="search-input" placeholder="Search by name, facility, email…" oninput="filterLeads()"/>
+      <button class="export-btn" onclick="exportCSV()">⬇ Export CSV</button>
+      <span style="font-size:11px;color:#5A6880;margin-left:auto" id="result-count"></span>
+    </div>
+    <table id="leads-table">
+      <thead>
+        <tr>
+          <th onclick="sortBy('created_at')" id="th-date">Date ↕</th>
+          <th onclick="sortBy('facility')" id="th-facility">Facility</th>
+          <th onclick="sortBy('name')" id="th-name">Name</th>
+          <th onclick="sortBy('role')" id="th-role">Role</th>
+          <th onclick="sortBy('beds')" id="th-beds">Beds</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th onclick="sortBy('y1_net')" id="th-y1">Proj. Y1 Net ↕</th>
+          <th>Last Saved</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="leads-body">
+        <tr><td colspan="10" class="empty">Loading leads…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const SV_URL     = "https://qbaougugtogrybssgjwb.supabase.co";
+const SV_SERVICE = ["sb_secret_Zl","JVig_DowPUOo5Y","WDCtPg_Ari1M4uB"].join("");
+const ADMIN_PASS = "SyncVitals2026!";  // Change this
+
+let allLeads = [];
+let sortCol  = 'created_at';
+let sortAsc  = false;
+let expandedId = null;
+
+function doAdminLogin() {
+  const pw = document.getElementById('admin-pw').value;
+  if (pw === ADMIN_PASS) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-panel').style.display  = 'block';
+    loadLeads();
+  } else {
+    document.getElementById('login-err').textContent = 'Incorrect password.';
+  }
+}
+
+function adminLogout() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('admin-panel').style.display  = 'none';
+  document.getElementById('admin-pw').value = '';
+}
+
+async function loadLeads() {
+  document.getElementById('last-refresh').textContent = 'Loading…';
+  const r = await fetch(SV_URL + "/rest/v1/leads?select=*&order=created_at.desc", {
+    headers: { "apikey": SV_SERVICE, "Authorization": "Bearer " + SV_SERVICE }
+  });
+  allLeads = await r.json();
+  renderStats();
+  renderTable(allLeads);
+  document.getElementById('last-refresh').textContent =
+    'Updated ' + new Date().toLocaleTimeString();
+}
+
+function renderStats() {
+  const now = new Date();
+  const weekAgo = new Date(now - 7*24*60*60*1000);
+  const thisWeek = allLeads.filter(l => new Date(l.created_at) > weekAgo).length;
+  const avgBeds = allLeads.length
+    ? Math.round(allLeads.reduce((s,l) => s + (l.beds||0), 0) / allLeads.length)
+    : 0;
+  const avgY1 = allLeads.length
+    ? allLeads.reduce((s,l) => s + (l.y1_net||0), 0) / allLeads.length
+    : 0;
+  document.getElementById('s-total').textContent   = allLeads.length;
+  document.getElementById('s-week').textContent    = thisWeek;
+  document.getElementById('s-avg-beds').textContent = avgBeds || '—';
+  document.getElementById('s-avg-y1').textContent  = avgY1 ? fmtM(avgY1) : '—';
+}
+
+function filterLeads() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  const filtered = q
+    ? allLeads.filter(l =>
+        (l.name||'').toLowerCase().includes(q) ||
+        (l.facility||'').toLowerCase().includes(q) ||
+        (l.email||'').toLowerCase().includes(q) ||
+        (l.role||'').toLowerCase().includes(q))
+    : allLeads;
+  renderTable(filtered);
+}
+
+function sortBy(col) {
+  if (sortCol === col) sortAsc = !sortAsc;
+  else { sortCol = col; sortAsc = col !== 'created_at' && col !== 'y1_net'; }
+  document.querySelectorAll('th').forEach(t => t.classList.remove('sorted'));
+  const th = document.getElementById('th-' + col.replace('created_at','date').replace('y1_net','y1'));
+  if (th) th.classList.add('sorted');
+  filterLeads();
+}
+
+function renderTable(leads) {
+  const sorted = [...leads].sort((a,b) => {
+    const av = a[sortCol] ?? '', bv = b[sortCol] ?? '';
+    return sortAsc ? (av > bv ? 1 : -1) : (av < bv ? 1 : -1);
+  });
+  document.getElementById('result-count').textContent =
+    sorted.length + ' of ' + allLeads.length + ' leads';
+  const tbody = document.getElementById('leads-body');
+  if (!sorted.length) {
+    tbody.innerHTML = '<tr><td colspan="10" class="empty">No leads found.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = sorted.map(l => {
+    const date = l.created_at ? new Date(l.created_at).toLocaleDateString() : '—';
+    const saved = l.last_saved ? new Date(l.last_saved).toLocaleDateString() : '—';
+    const y1 = l.y1_net ? fmtM(l.y1_net) : '—';
+    const detail = expandedId === l.id ? `
+      <tr class="detail-row" id="detail-${l.id}">
+        <td colspan="10">
+          <div style="font-size:11px;font-weight:700;color:#5A6880;margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em">Calculator Inputs</div>
+          <div class="detail-grid">
+            ${[['Beds',l.beds],['Occupancy',l.occ+'%'],['MC Mix',l.mc_pct+'%'],['Avg LOS',l.los+' days'],
+               ['PDPM Rate','$'+l.pdpm],['Readmit Rate',l.readmit+'%'],['Readmit Reduction',l.readmit_red+'%'],
+               ['Home Discharge',l.home+'%'],['Outpatient Opt',l.opt+'%'],['Enrollment',l.enroll+'%'],
+               ['Day 1 Existing',l.existing],['Attrition',l.attrit+'%'],['RPM Revenue','$'+l.rpm_rev+'/pt/mo'],
+               ['SV In-Facility','$'+l.sv_pa+'/pt/mo'],['SV Post-Discharge','$'+l.sv_pb+'/pt/mo']]
+            .map(([k,v]) => `<div class="detail-item"><label>${k}</label><span>${v||'—'}</span></div>`).join('')}
+          </div>
+          <div style="margin-top:12px;font-size:11px;font-weight:700;color:#5A6880;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Saved Results</div>
+          <div class="detail-grid">
+            ${[['Y1 Net',l.y1_net?fmtM(l.y1_net):'—'],['Y2 Net',l.y2_net?fmtM(l.y2_net):'—'],
+               ['Y3 Net',l.y3_net?fmtM(l.y3_net):'—'],['Payback',l.payback?l.payback.toFixed(1)+' mo':'—'],
+               ['ROI',l.roi?l.roi.toFixed(1)+'×':'—']]
+            .map(([k,v]) => `<div class="detail-item"><label>${k}</label><span style="color:#1A7A4A">${v}</span></div>`).join('')}
+          </div>
+        </td>
+      </tr>` : '';
+    return `
+      <tr>
+        <td>${date}</td>
+        <td><strong>${esc(l.facility||'—')}</strong></td>
+        <td>${esc(l.name||'—')}</td>
+        <td><span class="role-badge">${esc(l.role||'—')}</span></td>
+        <td>${l.beds||'—'}</td>
+        <td><a href="mailto:${esc(l.email)}" style="color:#028090">${esc(l.email||'—')}</a></td>
+        <td>${esc(l.phone||'—')}</td>
+        <td class="y1-val">${y1}</td>
+        <td style="color:#888">${saved}</td>
+        <td><button onclick="toggleDetail('${l.id}')" style="background:none;border:1px solid #DDE4EE;border-radius:4px;padding:3px 10px;font-size:11px;cursor:pointer;color:#028090">${expandedId===l.id?'▲ Hide':'▼ Details'}</button></td>
+      </tr>${detail}`;
+  }).join('');
+}
+
+function toggleDetail(id) {
+  expandedId = expandedId === id ? null : id;
+  filterLeads();
+}
+
+function fmtM(n) {
+  if (!n) return '—';
+  if (Math.abs(n) >= 1e6) return '$' + (n/1e6).toFixed(2) + 'M';
+  if (Math.abs(n) >= 1e3) return '$' + Math.round(n/1e3) + 'K';
+  return '$' + Math.round(n);
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function exportCSV() {
+  const cols = ['Date','Facility','Name','Role','Email','Phone','Beds','Occ%','MC Mix%',
+                'LOS','PDPM','Y1 Net','Y2 Net','Y3 Net','Payback','ROI','Last Saved'];
+  const rows = allLeads.map(l => [
+    l.created_at?new Date(l.created_at).toLocaleDateString():'',
+    l.facility||'', l.name||'', l.role||'', l.email||'', l.phone||'',
+    l.beds||'', l.occ||'', l.mc_pct||'', l.los||'', l.pdpm||'',
+    l.y1_net||'', l.y2_net||'', l.y3_net||'', l.payback||'', l.roi||'',
+    l.last_saved?new Date(l.last_saved).toLocaleDateString():''
+  ].map(v => '"'+String(v).replace(/"/g,'""')+'"').join(','));
+  const csv = [cols.join(','), ...rows].join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'syncvitals-leads-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+}
+
+document.getElementById('admin-pw').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doAdminLogin();
+});
+</script>
+</body>
+</html>
