@@ -137,10 +137,27 @@ function adminLogout() {
 
 async function loadLeads() {
   document.getElementById('last-refresh').textContent = 'Loading…';
-  const r = await fetch(SV_URL + "/rest/v1/leads?select=*&order=created_at.desc", {
-    headers: { "apikey": SV_SERVICE, "Authorization": "Bearer " + SV_SERVICE }
-  });
-  allLeads = await r.json();
+  try {
+    const r = await fetch(SV_URL + "/rest/v1/leads?select=*&order=created_at.desc", {
+      headers: {
+        "apikey": SV_SERVICE,
+        "Authorization": "Bearer " + SV_SERVICE,
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      }
+    });
+    const text = await r.text();
+    if (!r.ok) {
+      document.getElementById('last-refresh').textContent = 'Error: ' + r.status + ' — ' + text.slice(0,120);
+      console.error('loadLeads error:', r.status, text);
+      return;
+    }
+    allLeads = JSON.parse(text);
+  } catch(e) {
+    document.getElementById('last-refresh').textContent = 'Network error: ' + e.message;
+    console.error(e);
+    return;
+  }
   renderStats();
   renderTable(allLeads);
   document.getElementById('last-refresh').textContent =
