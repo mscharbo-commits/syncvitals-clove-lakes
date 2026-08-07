@@ -138,14 +138,19 @@ function adminLogout() {
 async function loadLeads() {
   document.getElementById('last-refresh').textContent = 'Loading…';
   try {
+    const ctrl = new AbortController();
+    const timeout = setTimeout(() => ctrl.abort(), 8000);
     const r = await fetch(SV_URL + "/rest/v1/leads?select=*&order=created_at.desc", {
+      signal: ctrl.signal,
       headers: {
         "apikey": SV_SERVICE,
         "Authorization": "Bearer " + SV_SERVICE,
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        "Accept": "application/json",
+        "X-Client-Info": "syncvitals-admin"
       }
     });
+    clearTimeout(timeout);
     const text = await r.text();
     if (!r.ok) {
       document.getElementById('last-refresh').textContent = 'Error: ' + r.status + ' — ' + text.slice(0,120);
@@ -154,7 +159,10 @@ async function loadLeads() {
     }
     allLeads = JSON.parse(text);
   } catch(e) {
-    document.getElementById('last-refresh').textContent = 'Network error: ' + e.message;
+    const msg = e.name === 'AbortError'
+      ? 'Request timed out — check Supabase URL and key'
+      : 'Network error: ' + e.message;
+    document.getElementById('last-refresh').textContent = msg;
     console.error(e);
     return;
   }
