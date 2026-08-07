@@ -111,6 +111,7 @@
 <script>
 const SV_URL     = "https://qbaougugtogrybssgjwb.supabase.co";
 const SV_SERVICE = ["sb_secret_Zl","JVig_DowPUOo5Y","WDCtPg_Ari1M4uB"].join("");
+const SV_ANON = "sb_publishable_NqGenCLfo5dMzlB5iklvsQ_8nOPiOXJ";
 const ADMIN_PASS = "SyncVitals2026!";  // Change this
 
 let allLeads = [];
@@ -138,19 +139,33 @@ function adminLogout() {
 async function loadLeads() {
   document.getElementById('last-refresh').textContent = 'Loading…';
   try {
+    // Try service key first, fall back to anon (RLS allows anon to read all)
+    const useKey = SV_SERVICE || SV_ANON;
     const ctrl = new AbortController();
     const timeout = setTimeout(() => ctrl.abort(), 8000);
     const r = await fetch(SV_URL + "/rest/v1/leads?select=*&order=created_at.desc", {
       signal: ctrl.signal,
       headers: {
-        "apikey": SV_SERVICE,
-        "Authorization": "Bearer " + SV_SERVICE,
+        "apikey": useKey,
+        "Authorization": "Bearer " + useKey,
         "Content-Type": "application/json",
-        "Accept": "application/json",
-        "X-Client-Info": "syncvitals-admin"
+        "Accept": "application/json"
       }
     });
     clearTimeout(timeout);
+    // If service key fails, retry with anon
+    if (!r.ok && useKey === SV_SERVICE) {
+      clearTimeout(timeout);
+      const r2 = await fetch(SV_URL + "/rest/v1/leads?select=*&order=created_at.desc", {
+        headers: { "apikey": SV_ANON, "Authorization": "Bearer " + SV_ANON,
+                   "Content-Type": "application/json", "Accept": "application/json" }
+      });
+      if (!r2.ok) throw new Error(await r2.text());
+      allLeads = await r2.json();
+      renderStats(); renderTable(allLeads);
+      document.getElementById('last-refresh').textContent = 'Updated ' + new Date().toLocaleTimeString() + ' (anon key)';
+      return;
+    }
     const text = await r.text();
     if (!r.ok) {
       document.getElementById('last-refresh').textContent = 'Error: ' + r.status + ' — ' + text.slice(0,120);
