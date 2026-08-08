@@ -2097,6 +2097,13 @@ async function doPrint() {
   const root      = document.getElementById('sv-print-root');
 
   if (root && resultsEl) {
+    // Clone results and strip auth bar + any hidden elements
+    const resultsClone = resultsEl.cloneNode(true);
+    const authBar = resultsClone.querySelector('#sv-auth-bar');
+    if (authBar) authBar.remove();
+    const printHdr = resultsClone.querySelector('#sv-print-header');
+    if (printHdr) printHdr.remove();
+
     // Build inputs summary table
     const inputDefs = [
       ['Beds', 'i_beds', ''],
@@ -2136,16 +2143,15 @@ async function doPrint() {
       + '<div>syncvitals.com</div>'
       + '<div>' + new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}) + '</div></div>'
       + '</div>'
-      // Results
-      + resultsEl.innerHTML
+      // Results (cloned, auth bar stripped)
+      + resultsClone.innerHTML
       // Inputs used
       + '<div style="margin-top:14pt;padding-top:10pt;border-top:1pt solid #DDE4EE">'
       + '<div style="font-size:8pt;font-weight:700;text-transform:uppercase;letter-spacing:.1em;'
       + 'color:#5A6880;margin-bottom:8pt">Assumptions Used in This Assessment</div>'
       + '<div class="print-inputs-grid">' + inputsHtml + '</div>'
       + '</div>'
-      // Disclaimer
-      + (discEl ? '<div style="margin-top:14pt">' + discEl.outerHTML + '</div>' : '');
+      // Disclaimer already included in resultsClone above
 
     root.style.display = 'block';
   }
