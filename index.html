@@ -1191,10 +1191,24 @@ p,li,.res-row .rl,.calc-label,.calc-unit,.step-body,.sv-item-text{font-weight:45
     margin: 0;
   }
 
-  /* Page setup */
+  /* Page setup — hide browser chrome (URL, date, title) */
   @page {
     size: letter portrait;
     margin: 0.6in 0.7in;
+    margin-header: 0;
+    margin-footer: 0;
+  }
+
+  /* Suppress browser-printed header/footer */
+  @page { margin: 0.6in 0.7in; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  /* Fix word-break/hyphenation on headings and labels */
+  #sv-print-root * {
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+    hyphens: none !important;
+    -webkit-hyphens: none !important;
   }
 
   /* Clean print styles */
