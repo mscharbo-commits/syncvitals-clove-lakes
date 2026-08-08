@@ -1981,6 +1981,7 @@ async function doSignUp() {
   const results = gatherResults();
   try {
     await sbInsert({ email, password_hash: hash, name, facility, role, phone,
+                     source: "clove-lakes",
                      ...inputs, ...results, last_saved: new Date().toISOString() });
     svSetSession({ email, password_hash: hash, name, facility, role });
     svCloseModal();

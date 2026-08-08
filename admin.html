@@ -94,6 +94,7 @@
           <th onclick="sortBy('name')" id="th-name">Name</th>
           <th onclick="sortBy('role')" id="th-role">Role</th>
           <th onclick="sortBy('beds')" id="th-beds">Beds</th>
+          <th>Source</th>
           <th>Email</th>
           <th>Phone</th>
           <th onclick="sortBy('y1_net')" id="th-y1">Proj. Y1 Net ↕</th>
@@ -269,6 +270,7 @@ function renderTable(leads) {
         <td>${esc(l.name||'—')}</td>
         <td><span class="role-badge">${esc(l.role||'—')}</span></td>
         <td>${l.beds||'—'}</td>
+        <td><span style="font-size:10px;font-weight:700;color:${l.source==='clove-lakes'?'#028090':l.source==='generic-snf'?'#1A7A4A':'#5B4FBE'}">${esc(l.source||'—')}</span></td>
         <td><a href="mailto:${esc(l.email)}" style="color:#028090">${esc(l.email||'—')}</a></td>
         <td>${esc(l.phone||'—')}</td>
         <td class="y1-val">${y1}</td>
@@ -296,11 +298,11 @@ function esc(s) {
 }
 
 function exportCSV() {
-  const cols = ['Date','Facility','Name','Role','Email','Phone','Beds','Occ%','MC Mix%',
+  const cols = ['Date','Facility','Name','Role','Source','Email','Phone','Beds','Occ%','MC Mix%',
                 'LOS','PDPM','Y1 Net','Y2 Net','Y3 Net','Payback','ROI','Last Saved','PDF Downloaded'];
   const rows = allLeads.map(l => [
     l.created_at?new Date(l.created_at).toLocaleDateString():'',
-    l.facility||'', l.name||'', l.role||'', l.email||'', l.phone||'',
+    l.facility||'', l.name||'', l.role||'', l.source||'', l.email||'', l.phone||'',
     l.beds||'', l.occ||'', l.mc_pct||'', l.los||'', l.pdpm||'',
     l.y1_net||'', l.y2_net||'', l.y3_net||'', l.payback||'', l.roi||'',
     l.last_saved?new Date(l.last_saved).toLocaleDateString():'',
