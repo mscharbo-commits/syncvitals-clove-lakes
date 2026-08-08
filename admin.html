@@ -104,7 +104,7 @@
         </tr>
       </thead>
       <tbody id="leads-body">
-        <tr><td colspan="10" class="empty">Loading leads…</td></tr>
+        <tr><td colspan="12" class="empty">Loading leads…</td></tr>
       </tbody>
     </table>
   </div>
@@ -235,7 +235,7 @@ function renderTable(leads) {
     sorted.length + ' of ' + allLeads.length + ' leads';
   const tbody = document.getElementById('leads-body');
   if (!sorted.length) {
-    tbody.innerHTML = '<tr><td colspan="10" class="empty">No leads found.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="12" class="empty">No leads found.</td></tr>';
     return;
   }
   tbody.innerHTML = sorted.map(l => {
@@ -244,7 +244,7 @@ function renderTable(leads) {
     const y1 = l.y1_net ? fmtM(l.y1_net) : '—';
     const detail = expandedId === l.id ? `
       <tr class="detail-row" id="detail-${l.id}">
-        <td colspan="10">
+        <td colspan="12">
           <div style="font-size:11px;font-weight:700;color:#5A6880;margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em">Calculator Inputs</div>
           <div class="detail-grid">
             ${[['Beds',l.beds],['Occupancy',l.occ+'%'],['MC Mix',l.mc_pct+'%'],['Avg LOS',l.los+' days'],
