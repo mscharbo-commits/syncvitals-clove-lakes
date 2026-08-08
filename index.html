@@ -1179,37 +1179,17 @@ p,li,.res-row .rl,.calc-label,.calc-unit,.step-body,.sv-item-text{font-weight:45
 
 /* ══ PRINT / PDF STYLES ══ */
 @media print {
-  /* Hide everything */
-  body * { visibility: hidden; }
+  /* Hide everything except the print container */
+  body > *:not(#sv-print-root) { display: none !important; }
 
-  /* Show only calc results + print header + disclaimer */
-  #p-calculator .calc-results,
-  #p-calculator .calc-results * { visibility: visible; }
-
-  /* Natural flow — no fixed/absolute (causes double-print) */
-  #p-calculator .calc-results {
-    position: absolute;
-    top: 0; left: 0;
+  /* Show print root full page */
+  #sv-print-root {
+    display: block !important;
+    position: static;
     width: 100%;
     padding: 0;
     margin: 0;
   }
-
-  /* Show print header */
-  #sv-print-header,
-  #sv-print-header * { visibility: visible !important; }
-
-  /* Show disclaimer */
-  .calc-disclaimer,
-  .calc-disclaimer * { visibility: visible !important; }
-
-  /* Full width columns */
-  .res-cols { flex-direction: column !important; }
-  .res-col  { width: 100% !important; }
-
-  /* Hide interactive elements */
-  #sv-auth-bar, #sv-pdf-btn, .calc-chart-wrap,
-  .calc-reset, .calc-inputs { display: none !important; }
 
   /* Page setup */
   @page {
@@ -1217,12 +1197,15 @@ p,li,.res-row .rl,.calc-label,.calc-unit,.step-body,.sv-item-text{font-weight:45
     margin: 0.6in 0.7in;
   }
 
-  /* Print colors and spacing */
+  /* Clean print styles */
   .res-block { break-inside: avoid; margin-bottom: 10pt; }
   .res-block-hdr { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .res-row { font-size: 9pt; }
   .rv { font-size: 9pt; }
   .calc-disclaimer { margin-top: 16pt; font-size: 8pt; }
+  .print-inputs-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 4pt 12pt; }
+  .print-input-item label { font-size: 7pt; color: #5A6880; display: block; }
+  .print-input-item span  { font-size: 8.5pt; font-weight: 600; color: #0D2B5E; }
 }
 </style>
 
@@ -2105,21 +2088,74 @@ async function doPrint() {
 
   svCloseModal();
 
-  // Set facility name and date in print header
-  const facilityEl = document.getElementById('pdf-facility-name');
-  const dateEl     = document.getElementById('pdf-date');
-  if (facilityEl) facilityEl.textContent = svSession.facility || svSession.email;
-  if (dateEl)     dateEl.textContent = new Date().toLocaleDateString('en-US',
-    {year:'numeric', month:'long', day:'numeric'});
+  // Print header is now built dynamically in sv-print-root
+  const hdr = null; // kept for reference
 
-  // Show print header
-  const hdr = document.getElementById('sv-print-header');
-  if (hdr) hdr.style.display = 'block';
+  // Build the print root content
+  const resultsEl = document.querySelector('#p-calculator .calc-results');
+  const discEl    = document.querySelector('.calc-disclaimer');
+  const root      = document.getElementById('sv-print-root');
+
+  if (root && resultsEl) {
+    // Build inputs summary table
+    const inputDefs = [
+      ['Beds', 'i_beds', ''],
+      ['Occupancy', 'i_occ', '%'],
+      ['Medicare Mix', 'i_mc_pct', '%'],
+      ['Avg LOS', 'i_los', ' days'],
+      ['Part A Revenue', 'i_mc_rev', 'M'],
+      ['Readmit Rate', 'i_readmit', '%'],
+      ['Hosp Days Lost', 'i_hosp_days', ' days'],
+      ['PDPM Rate', 'i_pdpm', '/day', '$'],
+      ['Readmit Reduction', 'i_readmit_red', '%'],
+      ['VBP Gain', 'i_vbp', '%'],
+      ['Home Discharge', 'i_home', '%'],
+      ['Outpatient Opt-In', 'i_opt', '%'],
+      ['RPM Enrollment', 'i_enroll', '%'],
+      ['Day 1 Existing', 'i_existing', ' pts'],
+      ['Annual Attrition', 'i_attrit', '%'],
+      ['RPM Revenue', 'i_rpm_rev', '/pt/mo', '$'],
+      ['SV In-Facility Fee', 'i_sv_pa', '/pt/mo', '$'],
+      ['SV Post-Discharge Fee', 'i_sv_pb', '/pt/mo', '$'],
+    ];
+
+    const inputsHtml = inputDefs.map(([label, id, suffix, prefix]) => {
+      const el = document.getElementById(id);
+      const val = el ? (prefix||'') + el.value + (suffix||'') : '—';
+      return '<div class="print-input-item"><label>' + label + '</label><span>' + val + '</span></div>';
+    }).join('');
+
+    root.innerHTML =
+      // Header
+      '<div style="display:flex;justify-content:space-between;align-items:flex-end;'
+      + 'padding-bottom:8pt;border-bottom:2pt solid #0D2B5E;margin-bottom:14pt">'
+      + '<div><div style="font-size:18pt;font-weight:800;color:#0D2B5E">SyncVitals RPM Assessment</div>'
+      + '<div style="font-size:10pt;color:#5A6880;margin-top:2pt">'
+      + (svSession && svSession.facility ? svSession.facility : 'Your Facility') + '</div></div>'
+      + '<div style="text-align:right;font-size:8pt;color:#5A6880">'
+      + '<div>syncvitals.com</div>'
+      + '<div>' + new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}) + '</div></div>'
+      + '</div>'
+      // Results
+      + resultsEl.innerHTML
+      // Inputs used
+      + '<div style="margin-top:14pt;padding-top:10pt;border-top:1pt solid #DDE4EE">'
+      + '<div style="font-size:8pt;font-weight:700;text-transform:uppercase;letter-spacing:.1em;'
+      + 'color:#5A6880;margin-bottom:8pt">Assumptions Used in This Assessment</div>'
+      + '<div class="print-inputs-grid">' + inputsHtml + '</div>'
+      + '</div>'
+      // Disclaimer
+      + (discEl ? '<div style="margin-top:14pt">' + discEl.outerHTML + '</div>' : '');
+
+    root.style.display = 'block';
+  }
 
   setTimeout(() => {
     window.print();
-    setTimeout(() => { if (hdr) hdr.style.display = 'none'; }, 1500);
-  }, 200);
+    setTimeout(() => {
+      if (root) { root.style.display = 'none'; root.innerHTML = ''; }
+    }, 1500);
+  }, 300);
 }
 
 // Init auth bar on load
@@ -2265,6 +2301,9 @@ function go(id){
 </script>
 
 <!-- SyncVitals Auth Modal -->
+<!-- Print root — populated by doPrint(), hidden on screen -->
+<div id="sv-print-root" style="display:none"></div>
+
 <div id="sv-modal-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:20px">
   <div style="background:#fff;border-radius:12px;padding:28px 28px 24px;width:100%;max-width:520px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.25)">
     <button onclick="svCloseModal()" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:#aaa;line-height:1">×</button>
