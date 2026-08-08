@@ -1179,31 +1179,37 @@ p,li,.res-row .rl,.calc-label,.calc-unit,.step-body,.sv-item-text{font-weight:45
 
 /* ══ PRINT / PDF STYLES ══ */
 @media print {
-  /* Hide everything by default */
+  /* Hide everything */
   body * { visibility: hidden; }
 
-  /* Show only the calculator results panel */
+  /* Show only calc results + print header + disclaimer */
   #p-calculator .calc-results,
   #p-calculator .calc-results * { visibility: visible; }
 
-  /* Position results to fill the page */
+  /* Natural flow — no fixed/absolute (causes double-print) */
   #p-calculator .calc-results {
-    position: fixed;
+    position: absolute;
     top: 0; left: 0;
     width: 100%;
     padding: 0;
+    margin: 0;
   }
 
   /* Show print header */
   #sv-print-header,
-  #sv-print-header * { visibility: visible !important; position: static !important; }
+  #sv-print-header * { visibility: visible !important; }
 
-  /* Full width results */
+  /* Show disclaimer */
+  .calc-disclaimer,
+  .calc-disclaimer * { visibility: visible !important; }
+
+  /* Full width columns */
   .res-cols { flex-direction: column !important; }
   .res-col  { width: 100% !important; }
 
-  /* Hide auth bar, save button, chart */
-  #sv-auth-bar, #sv-pdf-btn, .calc-chart-wrap { display: none !important; }
+  /* Hide interactive elements */
+  #sv-auth-bar, #sv-pdf-btn, .calc-chart-wrap,
+  .calc-reset, .calc-inputs { display: none !important; }
 
   /* Page setup */
   @page {
@@ -1211,11 +1217,12 @@ p,li,.res-row .rl,.calc-label,.calc-unit,.step-body,.sv-item-text{font-weight:45
     margin: 0.6in 0.7in;
   }
 
-  /* Clean up colors for print */
-  .res-block { break-inside: avoid; margin-bottom: 12pt; }
+  /* Print colors and spacing */
+  .res-block { break-inside: avoid; margin-bottom: 10pt; }
   .res-block-hdr { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .res-row { font-size: 9pt; }
   .rv { font-size: 9pt; }
+  .calc-disclaimer { margin-top: 16pt; font-size: 8pt; }
 }
 </style>
 
