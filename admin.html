@@ -293,8 +293,70 @@ function renderTable(leads) {
 }
 
 function toggleDetail(id) {
-  expandedId = expandedId === id ? null : id;
-  filterLeads();
+  // If clicking same row — collapse
+  if (expandedId === id) {
+    expandedId = null;
+    const existing = document.getElementById('detail-' + id);
+    if (existing) existing.remove();
+    const btn = document.querySelector('[onclick="toggleDetail(\'' + id + '\')"]');
+    if (btn) btn.textContent = '▼ Details';
+    return;
+  }
+
+  // Remove any existing detail row
+  if (expandedId) {
+    const prev = document.getElementById('detail-' + expandedId);
+    if (prev) prev.remove();
+    const prevBtn = document.querySelector('[onclick="toggleDetail(\'' + expandedId + '\')"]');
+    if (prevBtn) prevBtn.textContent = '▼ Details';
+  }
+
+  expandedId = id;
+  const l = allLeads.find(x => x.id === id);
+  if (!l) return;
+
+  // Build detail HTML
+  const inputItems = [
+    ['Beds',l.beds],['Occupancy',(l.occ||'')+'%'],['MC Mix',(l.mc_pct||'')+'%'],
+    ['Avg LOS',(l.los||'')+' days'],['PDPM Rate','$'+(l.pdpm||'')],
+    ['Readmit Rate',(l.readmit||'')+'%'],['Readmit Reduction',(l.readmit_red||'')+'%'],
+    ['Home Discharge',(l.home||'')+'%'],['Outpatient Opt',(l.opt||'')+'%'],
+    ['Enrollment',(l.enroll||'')+'%'],['Day 1 Existing',l.existing],
+    ['Attrition',(l.attrit||'')+'%'],['RPM Revenue','$'+(l.rpm_rev||'')+'/pt/mo'],
+    ['SV In-Facility','$'+(l.sv_pa||'')+'/pt/mo'],['SV Post-Discharge','$'+(l.sv_pb||'')+'/pt/mo']
+  ].map(([k,v]) => '<div class="detail-item"><label>'+k+'</label><span>'+(v||'—')+'</span></div>').join('');
+
+  const resultItems = [
+    ['Y1 Net',l.y1_net?fmtM(l.y1_net):'—'],['Y2 Net',l.y2_net?fmtM(l.y2_net):'—'],
+    ['Y3 Net',l.y3_net?fmtM(l.y3_net):'—'],
+    ['Payback',l.payback?l.payback.toFixed(1)+' mo':'—'],
+    ['ROI',l.roi?l.roi.toFixed(1)+'×':'—']
+  ].map(([k,v]) => '<div class="detail-item"><label>'+k+'</label><span style="color:#1A7A4A">'+v+'</span></div>').join('');
+
+  const pdfSection = l.pdf_downloaded_at
+    ? '<div style="margin-top:12px;padding-top:10px;border-top:1px solid #DDE4EE;font-size:11px;color:#5A6880">'
+      + '<strong style="color:#1A7A4A">PDF Downloaded:</strong> '
+      + esc(l.pdf_downloaded_at_tz || new Date(l.pdf_downloaded_at).toLocaleString())
+      + ' &nbsp;&middot;&nbsp; <strong>Disclaimer acknowledged:</strong> '
+      + esc(l.pdf_disclaimer_version || 'v1') + '</div>'
+    : '';
+
+  const detailHtml = '<tr class="detail-row" id="detail-'+id+'">'
+    + '<td colspan="12">'
+    + '<div style="font-size:11px;font-weight:700;color:#5A6880;margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em">Calculator Inputs</div>'
+    + '<div class="detail-grid">' + inputItems + '</div>'
+    + '<div style="margin-top:12px;font-size:11px;font-weight:700;color:#5A6880;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Saved Results</div>'
+    + '<div class="detail-grid">' + resultItems + '</div>'
+    + pdfSection
+    + '</td></tr>';
+
+  // Insert after the current row
+  const btn = document.querySelector('[onclick="toggleDetail(\'' + id + '\')"]');
+  if (btn) {
+    btn.textContent = '▲ Hide';
+    const row = btn.closest('tr');
+    row.insertAdjacentHTML('afterend', detailHtml);
+  }
 }
 
 function fmtM(n) {
