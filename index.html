@@ -1619,6 +1619,9 @@ function calc(){
   // Chart
   drawChart(pa_net, c1, pa_net, c2, pa_net, c3, pa_net, ss_net_yr, cumul);
 
+  // Store raw results for gatherResults()
+  window._svResults = { tot_y1: tot_y1, tot_y2: tot_y2, tot_y3: tot_y3, payback: payback, roi: roi };
+
   // ── UPDATE FINANCIAL MODEL TAB ──
   // Part A
   var f_pa_g = document.getElementById('f_pa_gross');
@@ -1829,14 +1832,16 @@ function gatherInputs() {
 }
 
 // Gather current results from displayed elements
+// Raw calc results stored here by calc()
+window._svResults = {};
+
 function gatherResults() {
-  const get = id => {
-    const el = document.getElementById('r_' + id);
-    return el ? parseFloat(el.textContent.replace(/[$M,%K\s]/g,'')) || 0 : 0;
-  };
   return {
-    y1_net: get('c1'), y2_net: get('c2'), y3_net: get('c3'),
-    payback: get('payback2'), roi: parseFloat((document.getElementById('r_roi')||{}).textContent) || 0
+    y1_net:  window._svResults.tot_y1  || 0,
+    y2_net:  window._svResults.tot_y2  || 0,
+    y3_net:  window._svResults.tot_y3  || 0,
+    payback: window._svResults.payback || 0,
+    roi:     window._svResults.roi     || 0,
   };
 }
 

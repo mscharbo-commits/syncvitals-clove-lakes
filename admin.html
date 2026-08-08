@@ -98,6 +98,7 @@
           <th>Phone</th>
           <th onclick="sortBy('y1_net')" id="th-y1">Proj. Y1 Net ↕</th>
           <th>Last Saved</th>
+          <th>PDF Downloaded</th>
           <th></th>
         </tr>
       </thead>
@@ -272,6 +273,7 @@ function renderTable(leads) {
         <td>${esc(l.phone||'—')}</td>
         <td class="y1-val">${y1}</td>
         <td style="color:#888">${saved}</td>
+        <td style="color:${l.pdf_downloaded_at ? '#1A7A4A' : '#ccc'};font-weight:${l.pdf_downloaded_at ? '700' : '400'}">${l.pdf_downloaded_at ? '✓ ' + new Date(l.pdf_downloaded_at).toLocaleDateString() : '—'}</td>
         <td><button onclick="toggleDetail('${l.id}')" style="background:none;border:1px solid #DDE4EE;border-radius:4px;padding:3px 10px;font-size:11px;cursor:pointer;color:#028090">${expandedId===l.id?'▲ Hide':'▼ Details'}</button></td>
       </tr>${detail}`;
   }).join('');
@@ -295,13 +297,14 @@ function esc(s) {
 
 function exportCSV() {
   const cols = ['Date','Facility','Name','Role','Email','Phone','Beds','Occ%','MC Mix%',
-                'LOS','PDPM','Y1 Net','Y2 Net','Y3 Net','Payback','ROI','Last Saved'];
+                'LOS','PDPM','Y1 Net','Y2 Net','Y3 Net','Payback','ROI','Last Saved','PDF Downloaded'];
   const rows = allLeads.map(l => [
     l.created_at?new Date(l.created_at).toLocaleDateString():'',
     l.facility||'', l.name||'', l.role||'', l.email||'', l.phone||'',
     l.beds||'', l.occ||'', l.mc_pct||'', l.los||'', l.pdpm||'',
     l.y1_net||'', l.y2_net||'', l.y3_net||'', l.payback||'', l.roi||'',
-    l.last_saved?new Date(l.last_saved).toLocaleDateString():''
+    l.last_saved?new Date(l.last_saved).toLocaleDateString():'',
+    l.pdf_downloaded_at?new Date(l.pdf_downloaded_at).toLocaleDateString():''
   ].map(v => '"'+String(v).replace(/"/g,'""')+'"').join(','));
   const csv = [cols.join(','), ...rows].join('\n');
   const a = document.createElement('a');
