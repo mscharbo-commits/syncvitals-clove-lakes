@@ -261,6 +261,11 @@ function renderTable(leads) {
                ['ROI',l.roi?l.roi.toFixed(1)+'×':'—']]
             .map(([k,v]) => `<div class="detail-item"><label>${k}</label><span style="color:#1A7A4A">${v}</span></div>`).join('')}
           </div>
+          ${l.pdf_downloaded_at ? `
+          <div style="margin-top:12px;padding-top:10px;border-top:1px solid #DDE4EE;font-size:11px;color:#5A6880">
+            <strong style="color:#1A7A4A">PDF Downloaded:</strong> ${l.pdf_downloaded_at_tz || new Date(l.pdf_downloaded_at).toLocaleString()}
+            &nbsp;·&nbsp; <strong>Disclaimer acknowledged:</strong> ${l.pdf_disclaimer_version || 'v1'}
+          </div>` : ''}
         </td>
       </tr>` : '';
     return `
@@ -275,7 +280,7 @@ function renderTable(leads) {
         <td>${esc(l.phone||'—')}</td>
         <td class="y1-val">${y1}</td>
         <td style="color:#888">${saved}</td>
-        <td style="color:${l.pdf_downloaded_at ? '#1A7A4A' : '#ccc'};font-weight:${l.pdf_downloaded_at ? '700' : '400'}">${l.pdf_downloaded_at ? '✓ ' + new Date(l.pdf_downloaded_at).toLocaleDateString() : '—'}</td>
+        <td style="color:${l.pdf_downloaded_at ? '#1A7A4A' : '#ccc'};font-weight:${l.pdf_downloaded_at ? '600' : '400'};font-size:11px">${l.pdf_downloaded_at ? '✓ ' + (l.pdf_downloaded_at_tz || new Date(l.pdf_downloaded_at).toLocaleString()) : '—'}</td>
         <td><button onclick="toggleDetail('${l.id}')" style="background:none;border:1px solid #DDE4EE;border-radius:4px;padding:3px 10px;font-size:11px;cursor:pointer;color:#028090">${expandedId===l.id?'▲ Hide':'▼ Details'}</button></td>
       </tr>${detail}`;
   }).join('');
@@ -299,14 +304,15 @@ function esc(s) {
 
 function exportCSV() {
   const cols = ['Date','Facility','Name','Role','Source','Email','Phone','Beds','Occ%','MC Mix%',
-                'LOS','PDPM','Y1 Net','Y2 Net','Y3 Net','Payback','ROI','Last Saved','PDF Downloaded'];
+                'LOS','PDPM','Y1 Net','Y2 Net','Y3 Net','Payback','ROI','Last Saved','PDF Downloaded','PDF Timestamp','Disclaimer Version'];
   const rows = allLeads.map(l => [
     l.created_at?new Date(l.created_at).toLocaleDateString():'',
     l.facility||'', l.name||'', l.role||'', l.source||'', l.email||'', l.phone||'',
     l.beds||'', l.occ||'', l.mc_pct||'', l.los||'', l.pdpm||'',
     l.y1_net||'', l.y2_net||'', l.y3_net||'', l.payback||'', l.roi||'',
     l.last_saved?new Date(l.last_saved).toLocaleDateString():'',
-    l.pdf_downloaded_at?new Date(l.pdf_downloaded_at).toLocaleDateString():''
+    l.pdf_downloaded_at?new Date(l.pdf_downloaded_at).toLocaleDateString():'',
+    l.pdf_downloaded_at_tz||'', l.pdf_disclaimer_version||''
   ].map(v => '"'+String(v).replace(/"/g,'""')+'"').join(','));
   const csv = [cols.join(','), ...rows].join('\n');
   const a = document.createElement('a');
