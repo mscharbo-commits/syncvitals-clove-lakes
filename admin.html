@@ -226,6 +226,16 @@ function sortBy(col) {
   filterLeads();
 }
 
+function pdfRow(l) {
+  if (!l.pdf_downloaded_at) return '';
+  const ts = l.pdf_downloaded_at_tz || new Date(l.pdf_downloaded_at).toLocaleString();
+  const ver = l.pdf_disclaimer_version || 'v1';
+  return '<div style="margin-top:12px;padding-top:10px;border-top:1px solid #DDE4EE;font-size:11px;color:#5A6880">'
+    + '<strong style="color:#1A7A4A">PDF Downloaded:</strong> ' + esc(ts)
+    + ' &nbsp;&middot;&nbsp; <strong>Disclaimer acknowledged:</strong> ' + esc(ver)
+    + '</div>';
+}
+
 function renderTable(leads) {
   const sorted = [...leads].sort((a,b) => {
     const av = a[sortCol] ?? '', bv = b[sortCol] ?? '';
@@ -261,11 +271,7 @@ function renderTable(leads) {
                ['ROI',l.roi?l.roi.toFixed(1)+'×':'—']]
             .map(([k,v]) => `<div class="detail-item"><label>${k}</label><span style="color:#1A7A4A">${v}</span></div>`).join('')}
           </div>
-          ${l.pdf_downloaded_at ? `
-          <div style="margin-top:12px;padding-top:10px;border-top:1px solid #DDE4EE;font-size:11px;color:#5A6880">
-            <strong style="color:#1A7A4A">PDF Downloaded:</strong> ${l.pdf_downloaded_at_tz || new Date(l.pdf_downloaded_at).toLocaleString()}
-            &nbsp;·&nbsp; <strong>Disclaimer acknowledged:</strong> ${l.pdf_disclaimer_version || 'v1'}
-          </div>` : ''}
+          ${pdfRow(l)}
         </td>
       </tr>` : '';
     return `
